@@ -1,23 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api/index.js";
 
-const signin = createAsyncThunk("users/signin", async (formData, thunkAPI) => {
-  try {
-    const response = await api.signIn(formData);
-    return response.data;
-  } catch (err) {
-    return thunkAPI.rejectWithValue(err);
+export const signin = createAsyncThunk(
+  "users/signin",
+  async (formData, thunkAPI) => {
+    try {
+      const response = await api.signIn(formData);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
   }
-});
+);
 
-const signup = createAsyncThunk("users/signup", async (formData, thunkAPI) => {
-  try {
-    const response = await api.signUp(formData);
-    return response.data;
-  } catch (err) {
-    return thunkAPI.rejectWithValue(err);
+export const signup = createAsyncThunk(
+  "users/signup",
+  async (formData, thunkAPI) => {
+    try {
+      const response = await api.signUp(formData);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
   }
-});
+);
 
 const initialState = { authData: null };
 
@@ -43,3 +49,5 @@ const usersSlice = createSlice({
       });
   },
 });
+
+export default usersSlice.reducer;

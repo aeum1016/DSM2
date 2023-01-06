@@ -58,3 +58,17 @@ export const attemptCreateAttempt = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" + error });
   }
 };
+
+export const attemptGetUserAttempts = async (req, res) => {
+  try {
+    const allAttempts = await Attempt.find();
+
+    const userAttempts = allAttempts.filter(
+      (attempt) => attempt.userId == req.params.userId
+    );
+
+    res.status(200).json({ userAttempts });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" + error });
+  }
+};

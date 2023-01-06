@@ -15,10 +15,11 @@ CURAPI.interceptors.request.use((req) => {
   return req;
 });
 
-export const fetchAttempts = () => CURAPI.get("/attempts");
+export const fetchAttempts = () => CURAPI.get("/attempt");
 export const createAttempt = (newAttempt) =>
-  CURAPI.post("/attempts", newAttempt);
-export const fetchUserAttempts = (email) => CURAPI.get(`/attempts/${email}`);
+  CURAPI.post("/attempt", newAttempt);
+export const fetchUserAttempts = (userId) =>
+  CURAPI.get(`/attempt/user/${userId}`);
 
 export const signIn = (formData) => CURAPI.post("/user/signin", formData);
 export const signUp = (formData) => CURAPI.post("/user/signup", formData);
