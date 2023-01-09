@@ -7,7 +7,9 @@ import { ChakraProvider, Text } from "@chakra-ui/react";
 import App from "./App";
 import reducer from "./slices/reducers";
 
-const store = configureStore({ reducer });
+const store = configureStore({
+  reducer,
+});
 
 const container = document.getElementById("root");
 const root = createRoot(container);

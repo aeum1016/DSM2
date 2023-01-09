@@ -14,7 +14,7 @@ export const userGetUsers = async (req, res) => {
 };
 
 export const userGetUser = async (req, res) => {
-  const { uId } = req.body;
+  const { uId } = req.params;
 
   try {
     const existingUser = await User.findById(uId);
@@ -90,6 +90,8 @@ export const userSignUp = async (req, res) => {
   const { username, email, password, confirmPassword } = req.body;
 
   try {
+    console.log(req.body);
+
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Passwords don't match" });
 
@@ -107,6 +109,6 @@ export const userSignUp = async (req, res) => {
 
     res.status(200).json({ user: result, token });
   } catch (error) {
-    res.status(500).json({ message: "Something went wrong" + error });
+    res.status(500).json({ message: "Something went wrong: " + error });
   }
 };

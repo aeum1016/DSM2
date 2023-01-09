@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api/index.js";
 
-export const signin = createAsyncThunk(
+export const signinThunk = createAsyncThunk(
   "users/signin",
   async (formData, thunkAPI) => {
     try {
@@ -13,7 +13,7 @@ export const signin = createAsyncThunk(
   }
 );
 
-export const signup = createAsyncThunk(
+export const signupThunk = createAsyncThunk(
   "users/signup",
   async (formData, thunkAPI) => {
     try {
@@ -25,7 +25,7 @@ export const signup = createAsyncThunk(
   }
 );
 
-const initialState = { authData: null };
+const initialState = { authData: JSON.parse(localStorage["profile"]) };
 
 const usersSlice = createSlice({
   name: "users",
@@ -39,13 +39,13 @@ const usersSlice = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder
-      .addCase(signin.fulfilled, (state, action) => {
-        localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
-        state.authData = action?.data;
+      .addCase(signinThunk.fulfilled, (state, action) => {
+        localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
+        state.authData = action?.payload;
       })
-      .addCase(signup.fulfilled, (state, action) => {
-        localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
-        state.authData = action?.data;
+      .addCase(signupThunk.fulfilled, (state, action) => {
+        localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
+        state.authData = action?.payload;
       });
   },
 });

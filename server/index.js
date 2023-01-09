@@ -8,11 +8,10 @@ import userRoutes from "./routes/user.js";
 import friendRoutes from "./routes/friend.js";
 import attemptRoutes from "./routes/attempt.js";
 
-const app = express();
 dotenv.config();
 
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+const app = express();
+app.use(express.json());
 app.use(cors());
 
 app.use("/user", userRoutes);

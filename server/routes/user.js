@@ -15,7 +15,8 @@ router
   .get(userGetUsers)
   .patch(userUpdateUser)
   .delete(userDeleteUser); // get user, create account, update account, delete account
-router.route("/:userId").get(userGetUser); // get user, create account, update account, delete account
-router.route("/auth").get(userSignIn).post(userSignUp);
+router.route("/profile/:uId").get(userGetUser); // get user, create account, update account, delete account
+router.route("/signup").post(userSignUp);
+router.route("/signin").post(userSignIn);
 
 export default router;
