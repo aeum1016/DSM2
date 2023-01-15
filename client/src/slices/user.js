@@ -27,7 +27,7 @@ export const signupThunk = createAsyncThunk(
 
 const initialState = { authData: JSON.parse(localStorage["profile"]) };
 
-const usersSlice = createSlice({
+export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {

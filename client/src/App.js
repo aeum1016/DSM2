@@ -1,15 +1,21 @@
 import React from "react";
 import { Box, Button, Text } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { getuser } from "./slices/attempts";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
 import { signinThunk } from "./slices/user";
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
   const dispatch = useDispatch();
 
   const userId = "63a7442254c752317e051bea";
 
-  const user = {
+  const userData = {
     username: "aeum",
     email: "aeum@gmail.com",
     password: "7",
@@ -26,12 +32,16 @@ const App = () => {
   };
 
   const authData = useSelector((state) => state.user.authData);
-  console.log(authData);
+
+  const router = createBrowserRouter(
+    createRoutesFromElements(<Route path="/" element={<Navbar />}></Route>)
+  );
 
   return (
-    <Box bg="purple">
+    <Box bg="purple" w="100vw" h="100vh">
       <Text color="black">{authData?.token}</Text>
       <Button onClick={onClick}>Button</Button>
+      <RouterProvider router={router} />
     </Box>
   );
 };
