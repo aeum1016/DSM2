@@ -1,37 +1,100 @@
-import React, { useState, useEffect } from "react";
-import { Box, Heading } from "@chakra-ui/react";
-import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
-import decode from "jwt-decode";
-
-import { usersSlice } from "../../slices/user";
+import React from "react";
+import {
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  IconButton,
+  Spacer,
+} from "@chakra-ui/react";
+import { FaHome, FaTrophy, FaUser } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const { logout } = usersSlice.actions;
-
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
-
-  useEffect(() => {
-    const token = user?.token;
-
-    if (token) {
-      const decodedToken = decode(token);
-
-      if (decodedToken.exp * 1000 < new Date().getTime()) {
-        dispatch(logout());
-        setUser(null);
-      }
-    }
-
-    setUser(JSON.parse(localStorage.getItem("profile")));
-  }, [location]);
+  const myColor = "#EDF5FD";
+  const myColor2 = "#171B27";
 
   return (
-    <Box bg="blue">
-      <Heading color="black">This is my user: {user?.token}</Heading>
-    </Box>
+    <Flex
+      direction="horizontal"
+      paddingX="40px"
+      height="80px"
+      align="center"
+      width="100vw"
+      boxShadow="dark-lg"
+    >
+      <Heading color={myColor}>DoSomeMath</Heading>
+      <Spacer />
+      <HStack spacing="16px" align="center">
+        <IconButton
+          color={myColor}
+          variant="ghost"
+          fontSize="20px"
+          icon={<FaHome />}
+          _hover={{
+            background: { myColor2 },
+            opacity: "0.8",
+          }}
+          _active={{
+            background: { myColor2 },
+            transform: "scale(0.98)",
+          }}
+        />
+        <IconButton
+          color={myColor}
+          variant="ghost"
+          fontSize="20px"
+          icon={<FaTrophy />}
+          _hover={{
+            background: { myColor2 },
+            opacity: "0.8",
+          }}
+          _active={{
+            background: { myColor2 },
+            transform: "scale(0.98)",
+          }}
+        />
+        <Flex
+          align="center"
+          as={motion.div}
+          whileHover={{
+            background: { myColor2 },
+            opacity: "0.8",
+          }}
+          whileTap={{
+            background: { myColor2 },
+            scale: 0.98,
+          }}
+        >
+          <IconButton
+            color={myColor}
+            variant="ghost"
+            fontSize="20px"
+            icon={<FaUser />}
+            _hover={{
+              background: { myColor2 },
+            }}
+            _active={{
+              background: { myColor2 },
+            }}
+          />
+          <Button
+            color={myColor}
+            variant="ghost"
+            fontWeight="bold"
+            marginLeft="-18px"
+            _hover={{
+              background: { myColor2 },
+            }}
+            _active={{
+              background: { myColor2 },
+            }}
+          >
+            Sign Up
+          </Button>
+        </Flex>
+      </HStack>
+    </Flex>
   );
 };
 
