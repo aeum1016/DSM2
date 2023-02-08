@@ -6,6 +6,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 import App from "./App";
 import reducer from "./slices/reducers";
+import theme from "./theme";
 
 const store = configureStore({
   reducer,
@@ -15,9 +16,10 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
-  <ChakraProvider>
-    <Provider store={store}>
+  <Provider store={store}>
+    <ChakraProvider theme={theme}>
+      {console.log(theme)}
       <App />
-    </Provider>
-  </ChakraProvider>
+    </ChakraProvider>
+  </Provider>
 );

@@ -6,14 +6,12 @@ import {
   HStack,
   IconButton,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import { FaHome, FaTrophy, FaUser } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const Navbar = () => {
-  const myColor = "#EDF5FD";
-  const myColor2 = "#171B27";
-
   return (
     <Flex
       direction="horizontal"
@@ -23,34 +21,30 @@ const Navbar = () => {
       width="100vw"
       boxShadow="dark-lg"
     >
-      <Heading color={myColor}>DoSomeMath</Heading>
+      <Heading>DoSomeMath</Heading>
       <Spacer />
       <HStack spacing="16px" align="center">
         <IconButton
-          color={myColor}
+          color="brandLight.100"
           variant="ghost"
           fontSize="20px"
           icon={<FaHome />}
           _hover={{
-            background: { myColor2 },
-            opacity: "0.8",
+            background: "brandDark.800",
           }}
           _active={{
-            background: { myColor2 },
             transform: "scale(0.98)",
           }}
         />
         <IconButton
-          color={myColor}
+          color="brandLight.100"
           variant="ghost"
           fontSize="20px"
           icon={<FaTrophy />}
           _hover={{
-            background: { myColor2 },
-            opacity: "0.8",
+            background: "brandDark.800",
           }}
           _active={{
-            background: { myColor2 },
             transform: "scale(0.98)",
           }}
         />
@@ -58,40 +52,37 @@ const Navbar = () => {
           align="center"
           as={motion.div}
           whileHover={{
-            background: { myColor2 },
-            opacity: "0.8",
+            background: "brandDark.800",
           }}
           whileTap={{
-            background: { myColor2 },
             scale: 0.98,
           }}
         >
           <IconButton
-            color={myColor}
+            color="brandLight.100"
             variant="ghost"
             fontSize="20px"
             icon={<FaUser />}
             _hover={{
-              background: { myColor2 },
+              background: "brandDark.800",
             }}
             _active={{
-              background: { myColor2 },
+              background: "brandDark.800",
             }}
           />
-          <Button
-            color={myColor}
-            variant="ghost"
+          <Text
+            color="brandLight.100"
             fontWeight="bold"
-            marginLeft="-18px"
+            cursor="pointer"
             _hover={{
-              background: { myColor2 },
+              background: "brandDark.800",
             }}
             _active={{
-              background: { myColor2 },
+              background: "brandDark.800",
             }}
           >
             Sign Up
-          </Button>
+          </Text>
         </Flex>
       </HStack>
     </Flex>

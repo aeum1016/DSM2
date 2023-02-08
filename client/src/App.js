@@ -59,7 +59,7 @@ const App = () => {
   );
 
   return (
-    <Flex bg="#171B27" minW="100vw" minH="100vh">
+    <Flex minW="100vw" minH="100vh" color="brandLight.100">
       <RouterProvider router={router} />
     </Flex>
   );
