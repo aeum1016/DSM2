@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createBrowserRouter,
@@ -13,6 +13,7 @@ import { signinThunk } from "./slices/user";
 import Navbar from "./components/Navbar/Navbar";
 
 import { usersSlice } from "./slices/user";
+import Landing from "./components/Auth/Landing";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -55,11 +56,15 @@ const App = () => {
   };
 
   const router = createBrowserRouter(
-    createRoutesFromElements(<Route path="/" element={<Navbar />}></Route>)
+    createRoutesFromElements(
+      <Route path="/" element={<Navbar />}>
+        <Route path="/" element={<Landing />} />
+      </Route>
+    )
   );
 
   return (
-    <Flex minW="100vw" minH="100vh" color="brandLight.100">
+    <Flex minH="100vh" minW="100vw" color="brandLight.100">
       <RouterProvider router={router} />
     </Flex>
   );

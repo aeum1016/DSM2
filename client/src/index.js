@@ -18,7 +18,6 @@ const root = createRoot(container);
 root.render(
   <Provider store={store}>
     <ChakraProvider theme={theme}>
-      {console.log(theme)}
       <App />
     </ChakraProvider>
   </Provider>
