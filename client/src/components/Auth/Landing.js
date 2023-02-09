@@ -1,13 +1,11 @@
 import React from "react";
 import { Flex } from "@chakra-ui/react";
-import SignUp from "./SignUp";
+import SignupCard from "./SignUpCard";
 
 const Landing = () => {
-  return (
-    <Flex>
-      <SignUp />
-    </Flex>
-  );
+  const user = localStorage["profile"];
+
+  return <Flex>{user ? <></> : <SignupCard />}</Flex>;
 };
 
 export default Landing;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Flex } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import decode from "jwt-decode";
 
-import { signinThunk } from "./slices/user";
 import Navbar from "./components/Navbar/Navbar";
 
 import { usersSlice } from "./slices/user";
@@ -20,8 +19,6 @@ const App = () => {
   const authData = useSelector((state) => state.user.authData);
   const { logout } = usersSlice.actions;
 
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
-
   useEffect(() => {
     const token = authData?.token;
 
@@ -30,30 +27,9 @@ const App = () => {
 
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch(logout());
-        setUser(null);
       }
     }
-
-    setUser(authData);
-  }, [authData]);
-
-  const userId = "63a7442254c752317e051bea";
-
-  const userData = {
-    username: "aeum",
-    email: "aeum@gmail.com",
-    password: "7",
-    confirmPassword: "7",
-  };
-
-  const userLogin = {
-    username: "aeum",
-    password: "7",
-  };
-
-  const onClick = () => {
-    dispatch(signinThunk(userLogin));
-  };
+  }, [authData, dispatch, logout]);
 
   const router = createBrowserRouter(
     createRoutesFromElements(

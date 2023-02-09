@@ -87,14 +87,9 @@ export const userSignIn = async (req, res) => {
 };
 
 export const userSignUp = async (req, res) => {
-  const { username, email, password, confirmPassword } = req.body;
+  const { username, email, password } = req.body;
 
   try {
-    console.log(req.body);
-
-    if (password !== confirmPassword)
-      return res.status(400).json({ message: "Passwords don't match" });
-
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const result = await User.create({
