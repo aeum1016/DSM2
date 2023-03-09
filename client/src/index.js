@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { ChakraProvider } from "@chakra-ui/react";
 
+import "@fontsource/akshar";
+
 import App from "./App";
 import reducer from "./slices/reducers";
 import theme from "./theme";

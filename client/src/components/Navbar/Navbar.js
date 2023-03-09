@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Flex,
@@ -9,10 +9,17 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FaHome, FaTrophy, FaUser } from "react-icons/fa";
-import { motion } from "framer-motion";
 import { Outlet } from "react-router-dom";
+import { useNavigate, useLocation, redirect } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname == "/") {
+      navigate("/home", { redirect: "true" });
+    }
+  }, [location]);
   return (
     <Flex direction="column" minH="100%" minW="100%">
       <Flex
@@ -35,6 +42,7 @@ const Navbar = () => {
             _active={{
               transform: "scale(0.98)",
             }}
+            onClick={() => navigate("/home")}
           />
           <IconButton
             color="brandLight.100"
@@ -47,43 +55,21 @@ const Navbar = () => {
             _active={{
               transform: "scale(0.98)",
             }}
+            onClick={() => navigate("/leaderboard")}
           />
-          <Flex
-            align="center"
-            as={motion.div}
-            whileHover={{
+          <IconButton
+            color="brandLight.100"
+            variant="ghost"
+            fontSize="20px"
+            icon={<FaUser />}
+            _hover={{
               background: "brandDark.800",
             }}
-            whileTap={{
-              scale: 0.98,
+            _active={{
+              background: "brandDark.800",
             }}
-          >
-            <IconButton
-              color="brandLight.100"
-              variant="ghost"
-              fontSize="20px"
-              icon={<FaUser />}
-              _hover={{
-                background: "brandDark.800",
-              }}
-              _active={{
-                background: "brandDark.800",
-              }}
-            />
-            <Text
-              color="brandLight.100"
-              fontWeight="bold"
-              cursor="pointer"
-              _hover={{
-                background: "brandDark.800",
-              }}
-              _active={{
-                background: "brandDark.800",
-              }}
-            >
-              Sign Up
-            </Text>
-          </Flex>
+            onSubmit={() => navigate("/user")}
+          />
         </HStack>
       </Flex>
       <Flex height="100%" justify="center" align="center">

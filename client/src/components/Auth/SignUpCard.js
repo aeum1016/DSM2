@@ -10,16 +10,17 @@ import {
   Button,
   Heading,
   Text,
-  Link,
   IconButton,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { signupThunk } from "../../slices/user";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 
 export default function SignupCard() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,8 +36,8 @@ export default function SignupCard() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
-    const user = await dispatch(signupThunk(formData));
+    dispatch(signupThunk(formData));
+    navigate("/home");
   };
 
   return (
@@ -50,19 +51,13 @@ export default function SignupCard() {
             to do some math
           </Text>
         </Stack>
-        <Box
-          rounded={"lg"}
-          //   bg={useColorModeValue("brandLight.100", "brandDark.700")}
-          bg={"brandDark.700"}
-          boxShadow={"lg"}
-          p={8}
-        >
+        <Box rounded={"lg"} bg={"brandDark.700"} boxShadow={"lg"} p={8}>
           <form onSubmit={handleSubmit}>
             <Stack spacing={4} minW="20rem">
               <FormControl id="username" isRequired>
                 <FormLabel>Username</FormLabel>
                 <Input
-                  focusBorderColor="brandDark.800"
+                  focusBorderColor="brandDark.400"
                   type="text"
                   onChange={handleChange}
                 />
@@ -70,7 +65,7 @@ export default function SignupCard() {
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
                 <Input
-                  focusBorderColor="brandDark.800"
+                  focusBorderColor="brandDark.400"
                   type="email"
                   onChange={handleChange}
                 />
@@ -79,7 +74,7 @@ export default function SignupCard() {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <Input
-                    focusBorderColor="brandDark.800"
+                    focusBorderColor="brandDark.400"
                     type={showPassword ? "text" : "password"}
                     onChange={handleChange}
                   />
@@ -133,16 +128,18 @@ export default function SignupCard() {
                     bg: "brandDark.900",
                   }}
                   _active={{
-                    bg: "brandDark.400",
+                    bg: "brandDark.800",
                   }}
                 >
                   Sign up
                 </Button>
               </Stack>
-              <Stack pt={6}>
-                <Text align={"center"}>
-                  Already a user? <Link color={"blue.400"}>Login</Link>
-                </Text>
+              <Stack align={"center"}>
+                <ReactLink to="/">
+                  <Text color={"brandDark.200"} fontWeight={"medium"}>
+                    Already a user?
+                  </Text>
+                </ReactLink>
               </Stack>
             </Stack>
           </form>
