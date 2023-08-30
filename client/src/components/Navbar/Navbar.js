@@ -10,16 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { FaHome, FaTrophy, FaUser } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
-import { useNavigate, useLocation, redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  useEffect(() => {
-    if (location.pathname == "/") {
-      navigate("/home", { redirect: "true" });
-    }
-  }, [location]);
   return (
     <Flex direction="column" minH="100%" minW="100%">
       <Flex

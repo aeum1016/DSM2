@@ -9,18 +9,28 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+
 import { signinThunk } from "../../slices/user";
-import { Link as ReactLink } from "react-router-dom";
 
 export default function SigninCard() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+
+  const user = useSelector((state) => state.user.authData);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/home", { replace: true });
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -35,9 +45,9 @@ export default function SigninCard() {
     <Flex minH={"100%"} align={"center"} justify={"center"}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
+          <Heading fontSize={"4xl"}>Sign in</Heading>
           <Text fontSize={"lg"} fontWeight={"medium"} color={"brandDark.600"}>
-            to do some math
+            and do some math
           </Text>
         </Stack>
         <Box rounded={"lg"} bg={"brandDark.700"} boxShadow={"lg"} p={8}>

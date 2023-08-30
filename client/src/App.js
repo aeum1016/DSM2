@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback } from "react";
 import { Flex } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -12,15 +12,17 @@ import decode from "jwt-decode";
 import Navbar from "./components/Navbar/Navbar";
 
 import { usersSlice } from "./slices/user";
-import Landing from "./components/Auth/Landing";
 import SignupCard from "./components/Auth/SignUpCard";
+import SigninCard from "./components/Auth/SignInCard";
+import Game from "./components/Game/GamePage";
+import Landing from "./components/Auth/Landing";
 
 const App = () => {
   const dispatch = useDispatch();
   const authData = useSelector((state) => state.user.authData);
   const { logout } = usersSlice.actions;
 
-  useEffect(() => {
+  const checkExpired = useCallback(() => {
     const token = authData?.token;
 
     if (token) {
@@ -32,11 +34,15 @@ const App = () => {
     }
   }, [authData, dispatch, logout]);
 
+  setInterval(checkExpired, 1000 * 60 * 15);
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<Navbar />}>
-        <Route path="home" element={<Landing />} />
-        <Route path="signup" element={<SignupCard />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/home" element={<Game />} />
+        <Route path="/signin" element={<SigninCard />} />
+        <Route path="/signup" element={<SignupCard />} />
       </Route>
     )
   );

@@ -1,16 +1,21 @@
-import React from "react";
-import { Flex } from "@chakra-ui/react";
-import SigninCard from "./SignInCard";
-import Game from "../Game/Game";
+import { Text } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { redirect, useNavigate } from "react-router-dom";
 
 const Landing = () => {
-  const user = localStorage["profile"];
+  const user = useSelector((state) => state.user.authData);
+  const navigate = useNavigate();
 
-  return (
-    <Flex minW={"100%"} minH={"100%"} justify={"center"}>
-      {user ? <Game /> : <SigninCard />}
-    </Flex>
-  );
+  useEffect(() => {
+    if (user) {
+      navigate("/home", { replace: true });
+    } else {
+      navigate("/signin", { replace: true });
+    }
+  }, [user]);
+
+  return <Text>Loading...</Text>;
 };
 
 export default Landing;

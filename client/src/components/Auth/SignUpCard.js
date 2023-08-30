@@ -12,15 +12,17 @@ import {
   Text,
   IconButton,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signupThunk } from "../../slices/user";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { Link as ReactLink, redirect, useNavigate } from "react-router-dom";
 
 export default function SignupCard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.user.authData);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -37,8 +39,13 @@ export default function SignupCard() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     dispatch(signupThunk(formData));
-    navigate("/home");
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/home", { replace: true });
+    }
+  }, [user]);
 
   return (
     <Flex minH={"100%"} align={"center"} justify={"center"}>
@@ -135,7 +142,7 @@ export default function SignupCard() {
                 </Button>
               </Stack>
               <Stack align={"center"}>
-                <ReactLink to="/">
+                <ReactLink to="/signin">
                   <Text color={"brandDark.200"} fontWeight={"medium"}>
                     Already a user?
                   </Text>
