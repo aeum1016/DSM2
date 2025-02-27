@@ -1,13 +1,5 @@
-import React, { useEffect } from "react";
-import {
-  Button,
-  Flex,
-  Heading,
-  HStack,
-  IconButton,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
+import React from "react";
+import { Flex, Heading, HStack, IconButton, Spacer } from "@chakra-ui/react";
 import { FaHome, FaTrophy, FaUser } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -31,10 +23,10 @@ const Navbar = () => {
             fontSize="20px"
             icon={<FaHome />}
             _hover={{
-              background: "brandDark.800",
+              color: "brandDark.200",
             }}
             _active={{
-              transform: "scale(0.98)",
+              transform: "scale(0.95)",
             }}
             onClick={() => navigate("/home")}
           />
@@ -44,10 +36,10 @@ const Navbar = () => {
             fontSize="20px"
             icon={<FaTrophy />}
             _hover={{
-              background: "brandDark.800",
+              color: "brandDark.200",
             }}
             _active={{
-              transform: "scale(0.98)",
+              transform: "scale(0.95)",
             }}
             onClick={() => navigate("/leaderboard")}
           />
@@ -57,10 +49,10 @@ const Navbar = () => {
             fontSize="20px"
             icon={<FaUser />}
             _hover={{
-              background: "brandDark.800",
+              color: "brandDark.200",
             }}
             _active={{
-              background: "brandDark.800",
+              transform: "scale(0.95)",
             }}
             onSubmit={() => navigate("/user")}
           />

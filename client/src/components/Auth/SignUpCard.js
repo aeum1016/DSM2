@@ -49,7 +49,7 @@ export default function SignupCard() {
 
   return (
     <Flex minH={"100%"} align={"center"} justify={"center"}>
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack spacing={4} mx={"auto"} maxW={"lg"}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign Up
@@ -58,12 +58,13 @@ export default function SignupCard() {
             to do some math
           </Text>
         </Stack>
-        <Box rounded={"lg"} bg={"brandDark.700"} boxShadow={"lg"} p={8}>
+        <Box rounded={"lg"}>
           <form onSubmit={handleSubmit}>
             <Stack spacing={4} minW="20rem">
               <FormControl id="username" isRequired>
                 <FormLabel>Username</FormLabel>
                 <Input
+                  borderColor="brandDark.300"
                   focusBorderColor="brandDark.400"
                   type="text"
                   onChange={handleChange}
@@ -72,6 +73,7 @@ export default function SignupCard() {
               <FormControl id="email" isRequired>
                 <FormLabel>Email address</FormLabel>
                 <Input
+                  borderColor="brandDark.300"
                   focusBorderColor="brandDark.400"
                   type="email"
                   onChange={handleChange}
@@ -81,6 +83,7 @@ export default function SignupCard() {
                 <FormLabel>Password</FormLabel>
                 <InputGroup>
                   <Input
+                    borderColor="brandDark.300"
                     focusBorderColor="brandDark.400"
                     type={showPassword ? "text" : "password"}
                     onChange={handleChange}
@@ -129,13 +132,13 @@ export default function SignupCard() {
                   type="submit"
                   loadingText="Submitting"
                   size="lg"
-                  bg={"brandDark.800"}
+                  bg={"brandDark.600"}
                   color={"white"}
                   _hover={{
-                    bg: "brandDark.900",
+                    bg: "brandDark.700",
                   }}
                   _active={{
-                    bg: "brandDark.800",
+                    bg: "brandDark.600",
                   }}
                 >
                   Sign up

@@ -1,0 +1,29 @@
+package main
+
+import (
+	"fmt"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+)
+
+func main() {
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file, ", err);
+	}
+
+	// connection := models.DBConnection()
+	// defer connection.Close()
+
+	r := gin.Default()
+
+	config := cors.DefaultConfig()
+
+	config.AllowOrigins = []string{"http://localhost"}
+	config.AllowCredentials = true
+	r.Use(cors.New(config))
+
+	r.Run(":8080")
+}
