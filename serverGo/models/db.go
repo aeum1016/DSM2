@@ -2,39 +2,39 @@ package models
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
-	"sync"
 
-	"github.com/jackc/pgx/v5/pgxpool"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var ( 
-	Connection *pgxpool.Pool
-	err error
-	pgOnce sync.Once
+	db *mongo.Database
 )
 
-func DBConnection() *pgxpool.Pool {
-	pgOnce.Do(func() {
-		host := os.Getenv("DB_URL")
-		port := os.Getenv("DB_PORT")
-		user := os.Getenv("DB_USER")
-		pass := os.Getenv("DB_PASS")
-		dbname := os.Getenv("DB_NAME")
+func DBConnection(ctx context.Context) *mongo.Database {
+	uri := os.Getenv("MONGODB_URI")
+	if uri == "" {
+		log.Println("Set your 'MONGODB_URI' environment variable.")
+	}
 
-		connectionString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", 
-			user, pass, host, port, dbname)
-		
-		Connection, err = pgxpool.New(context.Background(), connectionString)
-		
-		if err != nil {
-			fmt.Printf("Failed to connect to database: %v\n", err)
-			os.Exit(1)
-		} else {
-			fmt.Println("Connection established to database ", dbname)
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	if err != nil {
+		panic(err)
+	}
+
+	defer func() {
+		if err := client.Disconnect(context.TODO()); err != nil {
+			panic(err)
 		}
-	})
+	}()
 
-	return Connection
+	db = client.Database("DSM2")
+
+	log.Println("Connection establish to database ", db.Name())
+
+	return db
 }
+
+
