@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/aeum1016/DSM2/models"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -14,8 +16,8 @@ func main() {
 		fmt.Println("Error loading .env file, ", err);
 	}
 
-	// connection := models.DBConnection()
-	// defer connection.Close()
+	models.DBConnection(context.Background())
+	defer models.Close()
 
 	r := gin.Default()
 

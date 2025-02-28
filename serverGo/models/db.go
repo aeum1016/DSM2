@@ -9,8 +9,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var ( 
-	db *mongo.Database
+var (
+	Client *mongo.Client
+	DB *mongo.Database
 )
 
 func DBConnection(ctx context.Context) *mongo.Database {
@@ -24,17 +25,17 @@ func DBConnection(ctx context.Context) *mongo.Database {
 		panic(err)
 	}
 
-	defer func() {
-		if err := client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
+	DB = client.Database("DSM2")
 
-	db = client.Database("DSM2")
+	log.Println("Connection establish to database ", DB.Name())
 
-	log.Println("Connection establish to database ", db.Name())
+	return DB
+}
 
-	return db
+func Close() {
+	if err := Client.Disconnect(context.TODO()); err != nil {
+		panic(err)
+	}
 }
 
 
