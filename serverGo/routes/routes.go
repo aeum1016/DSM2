@@ -1,7 +1,10 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/aeum1016/DSM2/routes/user"
+	"github.com/gin-gonic/gin"
+)
 
 func InitRoutes(r *gin.Engine) {
-	
+	user.InitUserRoutes(r)
 }

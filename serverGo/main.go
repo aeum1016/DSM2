@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/aeum1016/DSM2/models"
+	"github.com/aeum1016/DSM2/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -27,5 +28,6 @@ func main() {
 	config.AllowCredentials = true
 	r.Use(cors.New(config))
 
+	routes.InitRoutes(r)
 	r.Run(":8080")
 }

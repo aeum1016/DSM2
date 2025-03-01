@@ -5,13 +5,16 @@ import (
 	"log"
 	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 var (
 	Client *mongo.Client
 	DB *mongo.Database
+	UsersCollection *mongo.Collection
+	AttemptsCollection *mongo.Collection
 )
 
 func DBConnection(ctx context.Context) *mongo.Database {
@@ -20,14 +23,22 @@ func DBConnection(ctx context.Context) *mongo.Database {
 		log.Println("Set your 'MONGODB_URI' environment variable.")
 	}
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	client, err := mongo.Connect(options.Client().ApplyURI(uri))
 	if err != nil {
 		panic(err)
 	}
 
 	DB = client.Database("DSM2")
 
-	log.Println("Connection establish to database ", DB.Name())
+	var pingResult bson.M
+	if err := DB.RunCommand(context.TODO(), bson.D{{"ping", 1}}).Decode(&pingResult); err != nil {
+		panic(err)
+	}
+
+	UsersCollection = DB.Collection("users")
+	AttemptsCollection = DB.Collection("attempts")
+
+	log.Println("Connection establish to database", DB.Name())
 
 	return DB
 }
@@ -37,5 +48,3 @@ func Close() {
 		panic(err)
 	}
 }
-
-
