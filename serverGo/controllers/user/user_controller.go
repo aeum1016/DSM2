@@ -2,8 +2,9 @@ package user_controller
 
 import (
 	"context"
+	"crypto/sha256"
 	"fmt"
-	"log"
+	"net/mail"
 
 	"github.com/aeum1016/DSM2/models"
 	"github.com/gin-gonic/gin"
@@ -11,8 +12,10 @@ import (
 )
 
 type TaskController interface {
-	GetAllUsers(ctx *gin.Context) error
-	GetUsers(ctx *gin.Context) error
+	GetAllUsers(ctx *gin.Context) ([]models.User, error)
+	GetUsers(ctx *gin.Context) (models.User, error)
+	RegisterUser(ctx *gin.Context) (models.UserWithoutID, error)
+	LoginUser(ctx *gin.Context) (models.UserWithoutID, error)
 }
 
 func GetAllUsers(ctx *gin.Context) ([]models.User, error) {
@@ -44,14 +47,42 @@ func RegisterUser(ctx *gin.Context) (models.UserWithoutID, error) {
 		return models.UserWithoutID{}, fmt.Errorf("failed to bind registering user %s", err)
 	}
 
+	_, err = mail.ParseAddress(user.Email); if err != nil {
+		return models.UserWithoutID{}, fmt.Errorf("failed to register user %s", err)
+	}
+
+	h := sha256.New()
+	h.Write([]byte(user.Password))
+	user.Password = string(h.Sum(nil))
+	
 	user.Friends = []bson.ObjectID{}
 	user.Requests = []bson.ObjectID{}
 
 	col := models.UsersCollection
 	_, err = col.InsertOne(context.TODO(), user); if err != nil {
-		log.Printf("failed to insert user %s", err)
 		return models.UserWithoutID{}, fmt.Errorf("failed to insert user %s", err)
 	}
 
 	return user, nil 
+}
+
+func LoginUser(ctx *gin.Context) (models.User, error) {
+	var user models.UserWithoutID
+	err := ctx.ShouldBind(&user); if err != nil {
+		return models.User{}, fmt.Errorf("failed to bind login user %s", err)
+	}
+
+	filter := bson.D{{"username", user.Username}}
+	foundUser, err := models.FindOneUser(filter); if err != nil {
+		return models.User{}, fmt.Errorf("failed to find login user %s", err)
+	}
+
+	h := sha256.New()
+	h.Write([]byte(user.Password))
+
+	if string(h.Sum(nil)) != foundUser.Password {
+		return models.User{}, fmt.Errorf("failed to login user")
+	}
+	
+	return foundUser, nil
 }
