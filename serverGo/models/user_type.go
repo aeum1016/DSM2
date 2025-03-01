@@ -16,14 +16,6 @@ type User struct {
 	Requests []bson.ObjectID
 }
 
-type UserWithoutID struct {
-	Email    string
-	Username string
-	Password string
-	Friends  []bson.ObjectID
-	Requests []bson.ObjectID
-}
-
 func FindOneUser(filter bson.D) (User, error) {
 	var result User
 	err := UsersCollection.FindOne(context.TODO(), filter).Decode(&result)

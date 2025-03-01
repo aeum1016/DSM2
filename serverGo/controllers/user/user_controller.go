@@ -11,11 +11,11 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
-type TaskController interface {
+type UserController interface {
 	GetAllUsers(ctx *gin.Context) ([]models.User, error)
 	GetUsers(ctx *gin.Context) (models.User, error)
-	RegisterUser(ctx *gin.Context) (models.UserWithoutID, error)
-	LoginUser(ctx *gin.Context) (models.UserWithoutID, error)
+	RegisterUser(ctx *gin.Context) (models.User, error)
+	LoginUser(ctx *gin.Context) (models.User, error)
 }
 
 func GetAllUsers(ctx *gin.Context) ([]models.User, error) {
@@ -24,13 +24,13 @@ func GetAllUsers(ctx *gin.Context) ([]models.User, error) {
 	filter := bson.D{}
 	
 	cur, err := users.Find(context.TODO(), filter); if err != nil {
-		return nil, fmt.Errorf("failed to get all users with error %s", err)
+		return nil, fmt.Errorf("GetAllUsers: failed to get all users with error %s", err)
 	}
 	
 	var results []models.User
 
 	err = cur.All(context.TODO(), &results); if err != nil {
-		return nil, fmt.Errorf("failed to get decode all users with error %s", err)
+		return nil, fmt.Errorf("GetAllUsers: failed to get decode all users with error %s", err)
 	}
 
 	return results, nil
@@ -41,15 +41,17 @@ func GetUserByEmail(ctx *gin.Context) (models.User, error) {
 	return models.FindOneUser(filter)
 }
 
-func RegisterUser(ctx *gin.Context) (models.UserWithoutID, error) {
-	var user models.UserWithoutID
+func RegisterUser(ctx *gin.Context) error {
+	var user models.User
 	err := ctx.ShouldBind(&user); if err != nil {
-		return models.UserWithoutID{}, fmt.Errorf("failed to bind registering user %s", err)
+		return fmt.Errorf("RegisterUser: failed to bind registering user %s", err)
 	}
 
 	_, err = mail.ParseAddress(user.Email); if err != nil {
-		return models.UserWithoutID{}, fmt.Errorf("failed to register user %s", err)
+		return fmt.Errorf("RegisterUser: failed to register user %s", err)
 	}
+
+	user.UserID = bson.NewObjectID()
 
 	h := sha256.New()
 	h.Write([]byte(user.Password))
@@ -60,28 +62,28 @@ func RegisterUser(ctx *gin.Context) (models.UserWithoutID, error) {
 
 	col := models.UsersCollection
 	_, err = col.InsertOne(context.TODO(), user); if err != nil {
-		return models.UserWithoutID{}, fmt.Errorf("failed to insert user %s", err)
+		return fmt.Errorf("RegisterUser: failed to insert user %s", err)
 	}
 
-	return user, nil 
+	return nil 
 }
 
 func LoginUser(ctx *gin.Context) (models.User, error) {
-	var user models.UserWithoutID
+	var user models.User
 	err := ctx.ShouldBind(&user); if err != nil {
-		return models.User{}, fmt.Errorf("failed to bind login user %s", err)
+		return models.User{}, fmt.Errorf("LoginUser: failed to bind login user %s", err)
 	}
 
 	filter := bson.D{{"username", user.Username}}
 	foundUser, err := models.FindOneUser(filter); if err != nil {
-		return models.User{}, fmt.Errorf("failed to find login user %s", err)
+		return models.User{}, fmt.Errorf("LoginUser: failed to find login user %s", err)
 	}
 
 	h := sha256.New()
 	h.Write([]byte(user.Password))
 
 	if string(h.Sum(nil)) != foundUser.Password {
-		return models.User{}, fmt.Errorf("failed to login user")
+		return models.User{}, fmt.Errorf("LoginUser: failed to login user")
 	}
 	
 	return foundUser, nil

@@ -40,13 +40,13 @@ func GetUserByEmail() gin.HandlerFunc {
 
 func RegisterUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		result, err := user_controller.RegisterUser(ctx)
+		err := user_controller.RegisterUser(ctx)
 		if err != nil {
       log.Println(err)
 			ctx.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, result)
+		ctx.JSON(http.StatusOK, nil)
 	}
 }
 
