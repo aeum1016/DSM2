@@ -40,11 +40,8 @@ const pushQuestion = (state, operand1, operand2, operator) => {
 const initialState = {
   settings: {
     mode: "c",
-    questions: 2,
-    add: "20",
-    subtract: "20",
-    multiply: "20",
-    divide: "20",
+    questions: 4,
+    max: [20, 20, 20, 20],
   },
   questions: [],
   status: 0,
@@ -62,9 +59,11 @@ const gameSlice = createSlice({
     create: (state) => {
       state.questions = [];
       for (let i = 0; i < state.settings.questions; i++) {
-        const operand1 = Math.floor(Math.random() * 20) + 1;
-        const operand2 = Math.floor(Math.random() * 20) + 1;
         const operator = Math.floor(Math.random() * 4);
+        const operand1 =
+          Math.floor(Math.random() * state.settings.max[operator]) + 1;
+        const operand2 =
+          Math.floor(Math.random() * state.settings.max[operator]) + 1;
         pushQuestion(state, operand1, operand2, operator);
       }
     },
@@ -89,8 +88,8 @@ const gameSlice = createSlice({
         state.answers.push(answer.payload);
         ++state.currentIndex;
         state.currentLine = Math.floor(state.currentIndex / 4);
-        state.endTime = new Date().getTime();
         if (state.currentIndex === state.questions.length) {
+          state.endTime = new Date().getTime();
           state.status = 2;
         }
       }

@@ -1,8 +1,8 @@
-import { Box, Button, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { create, nextGame, reset } from "../../../slices/game";
 import { create as createAttempt } from "../../../slices/attempts";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 
 const GameSummary = () => {
   const dispatch = useDispatch();
@@ -18,14 +18,16 @@ const GameSummary = () => {
     for (const [key, value] of Object.entries(settings)) {
       settingsString += key + ": " + value + ", ";
     }
-    dispatch(
-      createAttempt({
-        score: currentIndex,
-        time: endTime - startTime,
-        userId: user.user._id,
-        setting: settingsString,
-      })
-    );
+    if (user) {
+      dispatch(
+        createAttempt({
+          score: currentIndex,
+          time: endTime - startTime,
+          userId: user.user._id,
+          setting: settingsString,
+        })
+      );
+    }
   }, []);
 
   const onClose = () => {
@@ -35,31 +37,52 @@ const GameSummary = () => {
   };
 
   return (
-    <Box direction={"column"} justify={"center"} my={"8rem"} width={"80%"}>
-      <Text fontSize={40}>Questions Per Minute: </Text>
-      <Text fontSize={32}>
-        <Tooltip
-          label={
-            ((currentIndex * 60) / ((endTime - startTime) / 1000)).toFixed(2) +
-            " QPM"
-          }
-          placement={"right"}
-          fontSize={28}
-          borderRadius={4}
-        >
-          {((currentIndex * 60) / ((endTime - startTime) / 1000)).toFixed(0)}
-        </Tooltip>
-      </Text>
-      <Button
-        my={"3rem"}
-        size={"xs"}
-        variant={"ghost"}
-        _hover={{ bgColor: "brandDark.800" }}
-        _active={{ bgColor: "brandDark.800" }}
-        onClick={() => onClose()}
-      >
-        <Text fontSize={18}>New Game</Text>
-      </Button>
+    <Box direction={"column"} my={"8rem"} width={"80%"}>
+      <Flex direction={"column"} justify={"space-between"} height={"100%"}>
+        <Box>
+          <Text fontSize={40}>Questions Per Minute: </Text>
+          <Text fontSize={32}>
+            <Tooltip
+              label={
+                ((currentIndex * 60) / ((endTime - startTime) / 1000)).toFixed(
+                  2
+                ) + " QPM"
+              }
+              placement={"right"}
+              fontSize={14}
+            >
+              {((currentIndex * 60) / ((endTime - startTime) / 1000)).toFixed(
+                0
+              )}
+            </Tooltip>
+          </Text>
+        </Box>
+        <Flex direction={"column"} align={"center"}>
+          <Button
+            marginTop={"3rem"}
+            variant={"ghost"}
+            _hover={{
+              color: "brandDark.200",
+            }}
+            _active={{
+              color: "brandDark.200",
+              transform: "scale(0.95)",
+            }}
+            onClick={() => onClose()}
+          >
+            <Text fontSize={24} textDecoration={"underline"}>
+              Try Again
+            </Text>
+          </Button>
+          {user ? (
+            <Fragment></Fragment>
+          ) : (
+            <Text paddingTop={24} fontSize={40}>
+              Sign in to save your results!
+            </Text>
+          )}
+        </Flex>
+      </Flex>
     </Box>
   );
 };

@@ -58,7 +58,11 @@ const Game = () => {
         </InputGroup>
         <Text fontSize={"1.1rem"}>
           {start
-            ? "QPM:" + ((currentIndex * 60) / ((end - start) / 1000)).toFixed(2)
+            ? "QPM:" +
+              (
+                (currentIndex * 60) /
+                ((new Date().getTime() - start) / 1000)
+              ).toFixed(2)
             : ""}
         </Text>
       </Box>

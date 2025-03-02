@@ -12,9 +12,9 @@ export default function GamePage() {
   const user = useSelector((state) => state.user.authData);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/signin");
-    }
+    // if (!user) {
+    //   navigate("/signin");
+    // }
   }, [user]);
 
   const renderCurrentStatus = useCallback(() => {
@@ -33,10 +33,9 @@ export default function GamePage() {
       minH={"100%"}
       minW={"100%"}
       align={"center"}
-      justify={"center"}
+      justify={"space-between"}
     >
       {renderCurrentStatus()}
-      <Spacer />
       <Box my={"1rem"}>
         <Button variant={"unstyled"} _hover={{ color: "brandDark.300" }}>
           <Text fontWeight={"medium"}>Settings</Text>
