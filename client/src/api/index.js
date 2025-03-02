@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://localhost:8080",
 });
 
 const CURAPI = API;
@@ -21,6 +21,6 @@ export const createAttempt = (newAttempt) =>
 export const fetchUserAttempts = (userId) =>
   CURAPI.get(`/attempt/user/${userId}`);
 
-export const signIn = (formData) => CURAPI.post("/user/signin", formData);
-export const signUp = (formData) => CURAPI.post("/user/signup", formData);
+export const signIn = (formData) => CURAPI.post("/user/login", formData);
+export const signUp = (formData) => CURAPI.post("/user/register", formData);
 export const getuser = (userId) => CURAPI.get(`/user/profile/${userId}`);

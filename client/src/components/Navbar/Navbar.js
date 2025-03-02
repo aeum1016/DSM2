@@ -54,7 +54,7 @@ const Navbar = () => {
             _active={{
               transform: "scale(0.95)",
             }}
-            onSubmit={() => navigate("/user")}
+            onClick={() => navigate("/signin")}
           />
         </HStack>
       </Flex>

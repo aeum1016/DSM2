@@ -10,7 +10,7 @@ export default function Question({ index }) {
     opacity: "0.5",
   });
   useEffect(() => {
-    if (currentIndex == index) {
+    if (currentIndex === index) {
       setStyles({
         fontSize: "2.5rem",
         opacity: "1",

@@ -26,7 +26,7 @@ func main() {
 
 	config.AllowOrigins = []string{"http://localhost"}
 	config.AllowCredentials = true
-	r.Use(cors.New(config))
+	r.Use(cors.Default())
 
 	routes.InitRoutes(r)
 	r.Run(":8080")

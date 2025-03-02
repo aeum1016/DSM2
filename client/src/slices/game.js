@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const determineAnswer = (operand1, operand2, operator) => {
   switch (operator) {
+    default:
     case 0:
       return operand1 + operand2;
     case 1:

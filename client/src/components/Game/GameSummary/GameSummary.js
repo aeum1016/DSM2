@@ -28,7 +28,7 @@ const GameSummary = () => {
         })
       );
     }
-  }, []);
+  }, [user]);
 
   const onClose = () => {
     dispatch(reset());
