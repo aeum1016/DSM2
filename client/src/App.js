@@ -25,7 +25,6 @@ const App = () => {
   const checkExpired = useCallback(() => {
     if (authData) {
       const decodedToken = jwtDecode(authData);
-      decodedToken.
 
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch(logout());
