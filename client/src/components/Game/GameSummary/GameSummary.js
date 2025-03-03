@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { create, nextGame, reset } from "../../../slices/game";
 import { create as createAttempt } from "../../../slices/attempts";
 import { Fragment, useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 const GameSummary = () => {
   const dispatch = useDispatch();
@@ -21,9 +22,9 @@ const GameSummary = () => {
     if (user) {
       dispatch(
         createAttempt({
-          score: currentIndex,
+          completed: currentIndex,
           time: endTime - startTime,
-          userId: user.user._id,
+          userId: jwtDecode(user)._id,
           setting: settingsString,
         })
       );
@@ -61,6 +62,7 @@ const GameSummary = () => {
           <Button
             marginTop={"3rem"}
             variant={"ghost"}
+            color={"brandDark.100"}
             _hover={{
               color: "brandDark.200",
             }}

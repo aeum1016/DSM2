@@ -8,7 +8,7 @@ import (
 )
 
 func InitAttemptRoutes(r *gin.Engine) {
-	ur := r.Group("/attempts")
+	ur := r.Group("/attempt")
 	ur.GET("/get", GetAllAttempts())
 	ur.GET("/get/:uid", GetUserAttempts())
 	ur.POST("/create", CreateAttempt())

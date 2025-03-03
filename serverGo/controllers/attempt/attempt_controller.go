@@ -2,6 +2,7 @@ package attempt_controller
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/aeum1016/DSM2/models"
 	"github.com/gin-gonic/gin"
@@ -41,6 +42,7 @@ func CreateAttempt(ctx *gin.Context) error {
 	}
 
 	attempt.AttemptID = bson.NewObjectID()
+	attempt.CreatedAt = time.Now()
 
 	err = models.CreateAttempt(attempt); if err != nil {
 		return fmt.Errorf("CreateAttempt: could not create attempt with error %s", err)

@@ -4,18 +4,22 @@ import (
 	"context"
 	"crypto/sha256"
 	"fmt"
+	"log"
 	"net/mail"
+	"os"
+	"time"
 
 	"github.com/aeum1016/DSM2/models"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 type UserController interface {
 	GetAllUsers(ctx *gin.Context) ([]models.User, error)
 	GetUsers(ctx *gin.Context) (models.User, error)
-	RegisterUser(ctx *gin.Context) (models.User, error)
-	LoginUser(ctx *gin.Context) (models.User, error)
+	RegisterUser(ctx *gin.Context) (string, error)
+	LoginUser(ctx *gin.Context) (string, error)
 }
 
 func GetAllUsers(ctx *gin.Context) ([]models.User, error) {
@@ -41,14 +45,14 @@ func GetUserByEmail(ctx *gin.Context) (models.User, error) {
 	return models.FindOneUser(filter)
 }
 
-func RegisterUser(ctx *gin.Context) error {
+func RegisterUser(ctx *gin.Context) (string, error) {
 	var user models.User
 	err := ctx.ShouldBind(&user); if err != nil {
-		return fmt.Errorf("RegisterUser: failed to bind registering user %s", err)
+		return "", fmt.Errorf("RegisterUser: failed to bind registering user %s", err)
 	}
 
 	_, err = mail.ParseAddress(user.Email); if err != nil {
-		return fmt.Errorf("RegisterUser: failed to register user %s", err)
+		return "", fmt.Errorf("RegisterUser: failed to register user %s", err)
 	}
 
 	user.UserID = bson.NewObjectID()
@@ -62,29 +66,59 @@ func RegisterUser(ctx *gin.Context) error {
 
 	col := models.UsersCollection
 	_, err = col.InsertOne(context.TODO(), user); if err != nil {
-		return fmt.Errorf("RegisterUser: failed to insert user %s", err)
+		return "", fmt.Errorf("RegisterUser: failed to insert user %s", err)
 	}
 
-	return nil 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"email": user.Email,
+		"_id": user.UserID,
+		"exp": time.Now().Add(12 * time.Hour).Unix(),
+	})
+
+	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		log.Println("Set your 'JWT_SECRET' environment variable.")
+	}
+
+	tokenString, err := token.SignedString([]byte(secret)); if err != nil {
+		return "", fmt.Errorf("RegisterUser: failed to sign jwt %s", err)
+	}
+
+	return tokenString, nil
 }
 
-func LoginUser(ctx *gin.Context) (models.User, error) {
+func LoginUser(ctx *gin.Context) (string, error) {
 	var user models.User
 	err := ctx.ShouldBind(&user); if err != nil {
-		return models.User{}, fmt.Errorf("LoginUser: failed to bind login user %s", err)
+		return "", fmt.Errorf("LoginUser: failed to bind login user %s", err)
 	}
 
-	filter := bson.D{{"username", user.Username}}
+	filter := bson.D{{"email", user.Email}}
 	foundUser, err := models.FindOneUser(filter); if err != nil {
-		return models.User{}, fmt.Errorf("LoginUser: failed to find login user %s", err)
+		return "", fmt.Errorf("LoginUser: failed to find login user %s", err)
 	}
 
 	h := sha256.New()
 	h.Write([]byte(user.Password))
 
 	if string(h.Sum(nil)) != foundUser.Password {
-		return models.User{}, fmt.Errorf("LoginUser: failed to login user")
+		return "", fmt.Errorf("LoginUser: failed to login user")
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"email": foundUser.Email,
+		"_id": foundUser.UserID,
+		"exp": time.Now().Add(12 * time.Hour).Unix(),
+	})
+
+	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		log.Println("Set your 'JWT_SECRET' environment variable.")
+	}
+
+	tokenString, err := token.SignedString([]byte(secret)); if err != nil {
+		return "", fmt.Errorf("RegisterUser: failed to sign jwt %s", err)
 	}
 	
-	return foundUser, nil
+	return tokenString, nil
 }

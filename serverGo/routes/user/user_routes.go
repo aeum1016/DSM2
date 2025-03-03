@@ -40,23 +40,23 @@ func GetUserByEmail() gin.HandlerFunc {
 
 func RegisterUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		err := user_controller.RegisterUser(ctx)
+		jwt, err := user_controller.RegisterUser(ctx)
 		if err != nil {
       log.Println(err)
 			ctx.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, nil)
+		ctx.JSON(http.StatusOK, jwt)
 	}
 }
 
 func LoginUser() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		result, err := user_controller.LoginUser(ctx)
+		jwt, err := user_controller.LoginUser(ctx)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, result)
+		ctx.JSON(http.StatusOK, jwt)
 	}
 }

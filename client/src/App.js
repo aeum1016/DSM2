@@ -7,7 +7,7 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 import Navbar from "./components/Navbar/Navbar";
 
@@ -23,10 +23,9 @@ const App = () => {
   const { logout } = usersSlice.actions;
 
   const checkExpired = useCallback(() => {
-    const token = authData?.token;
-
-    if (token) {
-      const decodedToken = decode(token);
+    if (authData) {
+      const decodedToken = jwtDecode(authData);
+      decodedToken.
 
       if (decodedToken.exp * 1000 < new Date().getTime()) {
         dispatch(logout());

@@ -27,7 +27,7 @@ export const signupThunk = createAsyncThunk(
 
 const profile = localStorage["profile"];
 
-const initialState = { authData: profile ? JSON.parse(profile) : null };
+const initialState = { authData: profile ? profile : null };
 
 export const usersSlice = createSlice({
   name: "users",
@@ -42,11 +42,12 @@ export const usersSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder
       .addCase(signinThunk.fulfilled, (state, action) => {
-        localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
+        console.log(action?.payload);
+        localStorage.setItem("profile", action?.payload);
         state.authData = action?.payload;
       })
       .addCase(signupThunk.fulfilled, (state, action) => {
-        localStorage.setItem("profile", JSON.stringify({ ...action?.payload }));
+        localStorage.setItem("profile", action?.payload);
         state.authData = action?.payload;
       });
   },

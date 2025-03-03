@@ -20,7 +20,7 @@ export default function SigninCard() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -53,8 +53,8 @@ export default function SigninCard() {
         <Box rounded={"lg"}>
           <form onSubmit={handleSubmit}>
             <Stack spacing={4}>
-              <FormControl id="username">
-                <FormLabel>Username</FormLabel>
+              <FormControl id="email">
+                <FormLabel>Email</FormLabel>
                 <Input
                   borderColor="brandDark.300"
                   focusBorderColor="brandDark.400"

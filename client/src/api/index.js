@@ -17,7 +17,7 @@ const CURAPI = API;
 
 export const fetchAttempts = () => CURAPI.get("/attempt");
 export const createAttempt = (newAttempt) =>
-  CURAPI.post("/attempt", newAttempt);
+  CURAPI.post("/attempt/create", newAttempt);
 export const fetchUserAttempts = (userId) =>
   CURAPI.get(`/attempt/user/${userId}`);
 
