@@ -38,11 +38,26 @@ const pushQuestion = (state, operand1, operand2, operator) => {
   }
 };
 
+const getMax = (state, operator) => {
+  switch (operator) {
+    case 0:
+      return state.settings.max.add;
+    case 1:
+      return state.settings.max.sub;
+    case 2:
+      return state.settings.max.mult;
+    case 3:
+      return state.settings.max.div;
+    default:
+      return state.settings.max.add;
+  }
+};
+
 const initialState = {
   settings: {
     mode: "c",
-    questions: 4,
-    max: [20, 20, 20, 20],
+    endAt: 4,
+    max: { add: 20, sub: 20, mult: 20, div: 20 },
   },
   questions: [],
   status: 0,
@@ -59,14 +74,17 @@ const gameSlice = createSlice({
   reducers: {
     create: (state) => {
       state.questions = [];
-      for (let i = 0; i < state.settings.questions; i++) {
+      for (let i = 0; i < state.settings.endAt; i++) {
         const operator = Math.floor(Math.random() * 4);
         const operand1 =
-          Math.floor(Math.random() * state.settings.max[operator]) + 1;
+          Math.floor(Math.random() * getMax(state, operator)) + 1;
         const operand2 =
-          Math.floor(Math.random() * state.settings.max[operator]) + 1;
+          Math.floor(Math.random() * getMax(state, operator)) + 1;
         pushQuestion(state, operand1, operand2, operator);
       }
+    },
+    setSettings: (state, newSettings) => {
+      state.settings = newSettings.payload;
     },
     reset: (state) => {
       state.status = 0;
@@ -101,7 +119,7 @@ const gameSlice = createSlice({
   },
 });
 
-export const { create, reset, startGame, checkAnswer, nextGame } =
+export const { create, setSettings, reset, startGame, checkAnswer, nextGame } =
   gameSlice.actions;
 
 export default gameSlice.reducer;

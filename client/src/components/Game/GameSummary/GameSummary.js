@@ -15,17 +15,13 @@ const GameSummary = () => {
   const endTime = useSelector((state) => state.game.endTime);
 
   useEffect(() => {
-    let settingsString = "";
-    for (const [key, value] of Object.entries(settings)) {
-      settingsString += key + ": " + value + ", ";
-    }
     if (user) {
       dispatch(
         createAttempt({
           completed: currentIndex,
           time: endTime - startTime,
           userId: jwtDecode(user)._id,
-          setting: settingsString,
+          setting: JSON.stringify(settings),
         })
       );
     }

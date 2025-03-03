@@ -3,7 +3,7 @@ import Line from "./Line";
 import { useSelector } from "react-redux";
 
 const Lines = () => {
-  const questions = useSelector((state) => state.game.settings.questions);
+  const questions = useSelector((state) => state.game.settings.endAt);
   const currentLine = useSelector((state) => state.game.currentLine);
 
   const renderLines = useCallback(() => {

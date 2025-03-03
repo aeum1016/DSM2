@@ -5,7 +5,7 @@ import { HStack } from "@chakra-ui/react";
 import Question from "./Question/Question";
 
 const Line = ({ index }) => {
-  const questions = useSelector((state) => state.game.settings.questions);
+  const questions = useSelector((state) => state.game.settings.endAt);
 
   const renderQuestions = useCallback(() => {
     let rendered = [];

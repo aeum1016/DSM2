@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import GameSummary from "./GameSummary/GameSummary";
 import Game from "./Game/Game";
+import Settings from "./Settings/Settings";
 
 export default function GamePage() {
   const navigate = useNavigate();
@@ -36,11 +37,7 @@ export default function GamePage() {
       justify={"space-between"}
     >
       {renderCurrentStatus()}
-      <Box my={"1rem"}>
-        <Button variant={"unstyled"} _hover={{ color: "brandDark.300" }}>
-          <Text fontWeight={"medium"}>Settings</Text>
-        </Button>
-      </Box>
+      <Settings />
     </Flex>
   );
 }
