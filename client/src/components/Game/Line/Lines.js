@@ -1,22 +1,25 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createLine } from "../../../slices/game";
 import Line from "./Line";
-import { useSelector } from "react-redux";
 
 const Lines = () => {
-  const questions = useSelector((state) => state.game.settings.endAt);
+  const dispatch = useDispatch();
   const currentLine = useSelector((state) => state.game.currentLine);
+  const questions = useSelector((state) => state.game.questions);
+
+  useEffect(() => {
+    if (currentLine * 4 + 8 > questions.length) {
+      dispatch(createLine());
+    }
+  }, [currentLine, questions]);
 
   const renderLines = useCallback(() => {
-    let rendered = [];
-    for (
-      let i = currentLine;
-      i < Math.min(currentLine + 2, Math.ceil(questions / 4));
-      i++
-    ) {
-      rendered.push(<Line key={i} index={i} />);
-    }
-    return rendered;
-  }, [questions, currentLine]);
+    return [
+      <Line key={currentLine} index={currentLine} />,
+      <Line key={currentLine + 1} index={currentLine + 1} />,
+    ];
+  }, [currentLine]);
 
   return renderLines();
 };

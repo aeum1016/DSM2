@@ -1,10 +1,8 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Flex,
-  FormControl,
-  FormLabel,
-  NumberInput,
-  NumberInputField,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -14,9 +12,9 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { create, nextGame, reset, setSettings } from "../../../slices/game";
-import { useState } from "react";
+import { createQuestions, reset, setSettings } from "../../../slices/game";
+import RangeSetting from "./RangeSetting";
+import ModeSetting from "./ModeSetting";
 
 const Settings = () => {
   const dispatch = useDispatch();
@@ -26,10 +24,10 @@ const Settings = () => {
   const [settingsFormData, setSettingsFormData] = useState(settings);
 
   const onClose = () => {
-    dispatch(reset());
-    dispatch(setSettings(settingsFormData));
-    dispatch(create());
-    dispatch(nextGame());
+    if (JSON.stringify(settings) !== JSON.stringify(settingsFormData)) {
+      dispatch(reset());
+      dispatch(setSettings(settingsFormData));
+    }
   };
 
   return (
@@ -44,76 +42,111 @@ const Settings = () => {
           <PopoverContent>
             <PopoverArrow />
             <PopoverBody>
-              <Stack direction={"row"}>
-                <FormControl>
-                  <FormLabel color={"brandDark.800"}>Add</FormLabel>
-                  <NumberInput
-                    min={1}
-                    value={settingsFormData.max.add}
-                    onChange={(e) => {
-                      if (e)
-                        setSettingsFormData((data) => {
-                          return {
-                            ...data,
-                            max: { ...data.max, add: parseInt(e) },
-                          };
-                        });
-                    }}
-                  >
-                    <NumberInputField color={"brandDark.800"} />
-                  </NumberInput>
-                </FormControl>
-                <FormControl>
-                  <FormLabel color={"brandDark.800"}>Sub</FormLabel>
-                  <NumberInput
-                    min={1}
-                    value={settingsFormData.max.sub}
-                    onChange={(e) => {
-                      setSettingsFormData((data) => {
-                        return {
-                          ...data,
-                          max: { ...data.max, sub: parseInt(e) },
-                        };
-                      });
-                    }}
-                  >
-                    <NumberInputField color={"brandDark.800"} />
-                  </NumberInput>
-                </FormControl>
-                <FormControl>
-                  <FormLabel color={"brandDark.800"}>Mult</FormLabel>
-                  <NumberInput
-                    min={1}
-                    value={settingsFormData.max.mult}
-                    onChange={(e) => {
-                      setSettingsFormData((data) => {
-                        return {
-                          ...data,
-                          max: { ...data.max, mult: parseInt(e) },
-                        };
-                      });
-                    }}
-                  >
-                    <NumberInputField color={"brandDark.800"} />
-                  </NumberInput>
-                </FormControl>
-                <FormControl>
-                  <FormLabel color={"brandDark.800"}>Div</FormLabel>
-                  <NumberInput
-                    min={1}
-                    value={settingsFormData.max.div}
-                    onChange={(e) => {
-                      setSettingsFormData((data) => {
-                        return {
-                          ...data,
-                          max: { ...data.max, div: parseInt(e) },
-                        };
-                      });
-                    }}
-                  >
-                    <NumberInputField color={"brandDark.800"} />
-                  </NumberInput>
-                </FormControl>
+              <Stack>
+                <ModeSetting
+                  mode={settingsFormData.mode}
+                  setMode={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        mode: e,
+                      };
+                    });
+                  }}
+                  endAt={settingsFormData.endAt}
+                  setEndAt={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        endAt: parseInt(e),
+                      };
+                    });
+                  }}
+                />
+                <RangeSetting
+                  label={"Addition"}
+                  low={settingsFormData.min.add}
+                  high={settingsFormData.max.add}
+                  onChangeLow={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        min: { ...data.min, add: parseInt(e) },
+                      };
+                    });
+                  }}
+                  onChangeHigh={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        max: { ...data.max, add: parseInt(e) },
+                      };
+                    });
+                  }}
+                />
+                <RangeSetting
+                  label={"Subtraction"}
+                  low={settingsFormData.min.sub}
+                  high={settingsFormData.max.sub}
+                  onChangeLow={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        min: { ...data.min, sub: parseInt(e) },
+                      };
+                    });
+                  }}
+                  onChangeHigh={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        max: { ...data.max, sub: parseInt(e) },
+                      };
+                    });
+                  }}
+                />
+                <RangeSetting
+                  label={"Multiplication"}
+                  low={settingsFormData.min.mult}
+                  high={settingsFormData.max.mult}
+                  onChangeLow={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        min: { ...data.min, mult: parseInt(e) },
+                      };
+                    });
+                  }}
+                  onChangeHigh={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        max: { ...data.max, mult: parseInt(e) },
+                      };
+                    });
+                  }}
+                />
+                <RangeSetting
+                  label={"Division"}
+                  low={settingsFormData.min.div}
+                  high={settingsFormData.max.div}
+                  onChangeLow={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        min: { ...data.min, div: parseInt(e) },
+                      };
+                    });
+                  }}
+                  onChangeHigh={(e) => {
+                    setSettingsFormData((data) => {
+                      return {
+                        ...data,
+                        max: { ...data.max, div: parseInt(e) },
+                      };
+                    });
+                  }}
+                />
               </Stack>
             </PopoverBody>
           </PopoverContent>

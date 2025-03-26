@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Text, Tooltip } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { create, nextGame, reset } from "../../../slices/game";
+import { createLine, reset } from "../../../slices/game";
 import { create as createAttempt } from "../../../slices/attempts";
 import { Fragment, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -29,8 +29,6 @@ const GameSummary = () => {
 
   const onClose = () => {
     dispatch(reset());
-    dispatch(create());
-    dispatch(nextGame());
   };
 
   return (

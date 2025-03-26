@@ -1,40 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { generateQuestion } from "../util/QuestionUtil";
 
-const determineAnswer = (operand1, operand2, operator) => {
-  switch (operator) {
-    default:
-    case 0:
-      return operand1 + operand2;
-    case 1:
-      return operand1 - operand2;
-    case 2:
-      return operand1 * operand2;
-    case 3:
-      return operand1 / operand2;
-  }
+const createQuestion = (state) => {
+  const operator = Math.floor(Math.random() * 4);
+  state.questions.push(
+    generateQuestion(operator, getMin(state, operator), getMax(state, operator))
+  );
 };
 
-const pushQuestion = (state, operand1, operand2, operator) => {
+const getMin = (state, operator) => {
   switch (operator) {
+    case 0:
+      return state.settings.min.add;
+    case 1:
+      return state.settings.min.sub;
+    case 2:
+      return state.settings.min.mult;
     case 3:
-      state.questions.push({
-        operand1: operand1 * operand2,
-        operand2: operand2,
-        operator: ["+", "-", "*", "/"][operator],
-        answer: determineAnswer(operand1 * operand2, operand2, operator),
-      });
-      break;
+      return state.settings.min.div;
     default:
-      state.questions.push({
-        operand1: Math.max(operand1, operand2),
-        operand2: Math.min(operand1, operand2),
-        operator: ["+", "-", "*", "/"][operator],
-        answer: determineAnswer(
-          Math.max(operand1, operand2),
-          Math.min(operand1, operand2),
-          operator
-        ),
-      });
+      return state.settings.min.add;
   }
 };
 
@@ -57,7 +42,8 @@ const initialState = {
   settings: {
     mode: "c",
     endAt: 4,
-    max: { add: 20, sub: 20, mult: 20, div: 20 },
+    min: { add: 2, sub: 2, mult: 1, div: 1 },
+    max: { add: 100, sub: 100, mult: 12, div: 12 },
   },
   questions: [],
   status: 0,
@@ -72,20 +58,6 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    create: (state) => {
-      state.questions = [];
-      for (let i = 0; i < state.settings.endAt; i++) {
-        const operator = Math.floor(Math.random() * 4);
-        const operand1 =
-          Math.floor(Math.random() * getMax(state, operator)) + 1;
-        const operand2 =
-          Math.floor(Math.random() * getMax(state, operator)) + 1;
-        pushQuestion(state, operand1, operand2, operator);
-      }
-    },
-    setSettings: (state, newSettings) => {
-      state.settings = newSettings.payload;
-    },
     reset: (state) => {
       state.status = 0;
       state.questions = [];
@@ -95,31 +67,50 @@ const gameSlice = createSlice({
       state.startTime = 0;
       state.endTime = 0;
     },
+    setSettings: (state, newSettings) => {
+      state.settings = newSettings.payload;
+    },
+    createLine: (state) => {
+      console.log("Creating 1 line of questions");
+      for (let i = 0; i < 4; i++) {
+        createQuestion(state);
+      }
+    },
     startGame: (state) => {
       state.status = 1;
       state.startTime = new Date().getTime();
     },
     checkAnswer: (state, answer) => {
+      if (state.currentIndex >= state.questions.length) return;
       if (
-        state.currentIndex < state.questions.length &&
         parseInt(answer.payload) === state.questions[state.currentIndex].answer
       ) {
         state.answers.push(answer.payload);
         ++state.currentIndex;
         state.currentLine = Math.floor(state.currentIndex / 4);
-        if (state.currentIndex === state.questions.length) {
+        if (
+          state.settings.mode === "c" &&
+          state.currentIndex === state.settings.endAt
+        ) {
           state.endTime = new Date().getTime();
           state.status = 2;
         }
       }
     },
-    nextGame: (state) => {
-      state.status = 0;
+    endGame: (state) => {
+      state.endTime = new Date().getTime();
+      state.status = 2;
     },
   },
 });
 
-export const { create, setSettings, reset, startGame, checkAnswer, nextGame } =
-  gameSlice.actions;
+export const {
+  reset,
+  setSettings,
+  createLine,
+  startGame,
+  checkAnswer,
+  endGame,
+} = gameSlice.actions;
 
 export default gameSlice.reducer;

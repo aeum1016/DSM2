@@ -10,24 +10,35 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Lines from "../Line/Lines";
-import { checkAnswer, create, startGame } from "../../../slices/game";
+import { checkAnswer, endGame, startGame } from "../../../slices/game";
 
 const Game = () => {
   const dispatch = useDispatch();
-  const settings = useSelector((state) => state.game.settings);
   const status = useSelector((state) => state.game.status);
   const currentIndex = useSelector((state) => state.game.currentIndex);
   const start = useSelector((state) => state.game.startTime);
-  const end = useSelector((state) => state.game.endTime);
+  const settings = useSelector((state) => state.game.settings);
   const [answer, setAnswer] = useState("");
 
-  useEffect(() => {
-    dispatch(create());
-  }, [settings]);
+  const [endTimer, setEndTimer] = useState();
 
   useEffect(() => {
+    if (status === 0 && answer !== "") {
+      dispatch(startGame());
+      if (settings.mode === "d") {
+        setEndTimer(
+          setTimeout(() => dispatch(endGame()), settings.endAt * 1000)
+        );
+      }
+    }
     dispatch(checkAnswer(answer));
   }, [answer]);
+
+  useEffect(() => {
+    if (settings.mode !== "d") {
+      clearInterval(endTimer);
+    }
+  }, [settings]);
 
   useEffect(() => {
     setAnswer("");
@@ -51,7 +62,6 @@ const Game = () => {
             focusBorderColor={"brandDark.800"}
             onChange={(e) => {
               setAnswer(e.target.value);
-              if (status === 0) dispatch(startGame());
             }}
             value={answer}
           />
