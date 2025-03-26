@@ -1,0 +1,7 @@
+services:
+  dsm2-backend:
+    image: aeum1003/dsm2-backend:latest
+    container_name: dsm2-backend
+    env_file: .env
+    ports:
+      - 8081:8080

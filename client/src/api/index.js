@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: process.env.BACKEND_URL
+    ? process.env.BACKEND_URL
+    : "http://localhost:8080",
 });
 
 const CURAPI = API;
