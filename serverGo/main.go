@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/aeum1016/DSM2/models"
 	"github.com/aeum1016/DSM2/routes"
@@ -24,10 +25,10 @@ func main() {
 
 	config := cors.DefaultConfig()
 
-	config.AllowOrigins = []string{"http://localhost", "https://dsm2-frontend-896452775800.us-central1.run.app"}
+	config.AllowOrigins = []string{"http://localhost", os.Getenv("FRONTEND_URL")}
 	config.AllowCredentials = true
 	r.Use(cors.New(config))
 
 	routes.InitRoutes(r)
-	r.RunTLS(":8080", "ssl/backend.crt", "ssl/backend.key")
+	r.RunTLS(":8080", os.Getenv("SSL_CERT_CHAIN"), os.Getenv("SSL_CERT_PRIV"))
 }

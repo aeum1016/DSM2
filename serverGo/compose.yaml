@@ -3,5 +3,7 @@ services:
     image: aeum1003/dsm2-backend:latest
     container_name: dsm2-backend
     env_file: .env
+    volumes:
+      - /etc/letsencrypt:/ssl
     ports:
       - 8081:8080
