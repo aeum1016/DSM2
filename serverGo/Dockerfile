@@ -12,6 +12,7 @@ FROM alpine:latest
 
 # Run the command on container startup
 COPY --from=0 /usr/local/bin/ /usr/local/bin/
+COPY ssl/ ssl/
 
 EXPOSE 8080
 

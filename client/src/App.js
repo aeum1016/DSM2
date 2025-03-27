@@ -32,7 +32,7 @@ const App = () => {
     }
   }, [authData, dispatch, logout]);
 
-  setInterval(checkExpired, 1000 * 60 * 15);
+  setInterval(checkExpired, 1000 * 60 * 10);
 
   const router = createBrowserRouter(
     createRoutesFromElements(

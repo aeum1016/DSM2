@@ -24,10 +24,10 @@ func main() {
 
 	config := cors.DefaultConfig()
 
-	config.AllowOrigins = []string{"http://localhost"}
+	config.AllowOrigins = []string{"http://localhost", "https://dsm2-frontend-896452775800.us-central1.run.app"}
 	config.AllowCredentials = true
-	r.Use(cors.Default())
+	r.Use(cors.New(config))
 
 	routes.InitRoutes(r)
-	r.Run(":8080")
+	r.RunTLS(":8080", "ssl/backend.crt", "ssl/backend.key")
 }
