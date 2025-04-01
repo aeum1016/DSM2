@@ -17,6 +17,7 @@ import SigninCard from "./components/Auth/SignInCard";
 import Game from "./components/Game/GamePage";
 import Landing from "./components/Auth/Landing";
 import Leaderboard from "./components/Leaderboard/LeaderboardPage";
+import User from "./components/Auth/User/UserPage";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/" element={<Landing />} />
         <Route path="/home" element={<Game />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/user" element={<User />} />
         <Route path="/signin" element={<SigninCard />} />
         <Route path="/signup" element={<SignupCard />} />
       </Route>

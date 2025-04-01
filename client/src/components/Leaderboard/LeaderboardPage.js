@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import Leaderboard from "./Leaderboard/Leaderboard";
-import { GameModes } from "../../slices/game";
+import { GameModes, reset } from "../../slices/game";
+import { useDispatch } from "react-redux";
 
 export default function LeaderboardPage() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const mainSettings = {
@@ -20,6 +22,10 @@ export default function LeaderboardPage() {
     min: { add: 2, sub: 2, mult: 1, div: 1 },
     max: { add: 100, sub: 100, mult: 12, div: 12 },
   });
+
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   return (
     <Flex

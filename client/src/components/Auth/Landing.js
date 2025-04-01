@@ -1,11 +1,17 @@
-import { Text } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { Text } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { reset } from "../../slices/game";
 
 const Landing = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.authData);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   useEffect(() => {
     if (user) {

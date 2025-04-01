@@ -3,9 +3,11 @@ import { Flex, Heading, HStack, IconButton, Spacer } from "@chakra-ui/react";
 import { FaHome, FaTrophy, FaUser } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.authData);
   return (
     <Flex direction="column" minH="100%" minW="100%">
       <Flex
@@ -54,7 +56,13 @@ const Navbar = () => {
             _active={{
               transform: "scale(0.95)",
             }}
-            onClick={() => navigate("/signin")}
+            onClick={() => {
+              if (user) {
+                navigate("/user");
+              } else {
+                navigate("/signin");
+              }
+            }}
           />
         </HStack>
       </Flex>
