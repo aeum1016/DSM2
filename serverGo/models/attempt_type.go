@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type Attempt struct {
@@ -25,10 +26,10 @@ func CreateAttempt(att Attempt) error {
 	return nil
 }
 
-func FindAttempts(filter bson.D) ([]Attempt, error) {
+func FindAttempts(filter bson.D, opts *options.FindOptionsBuilder) ([]Attempt, error) {
 	attempts := AttemptsCollection
 	
-	cur, err := attempts.Find(context.TODO(), filter); if err != nil {
+	cur, err := attempts.Find(context.TODO(), filter, opts); if err != nil {
 		return nil, fmt.Errorf("failed to get attempts with error %s", err)
 	}
 	

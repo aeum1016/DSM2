@@ -7,6 +7,7 @@ import (
 	"github.com/aeum1016/DSM2/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type AttemptController interface {
@@ -18,7 +19,7 @@ type AttemptController interface {
 
 func GetAllAttempts(ctx *gin.Context) ([]models.Attempt, error) {
 	filter := bson.D{}
-	results, err := models.FindAttempts(filter); if err != nil {
+	results, err := models.FindAttempts(filter, &options.FindOptionsBuilder{}); if err != nil {
 		return nil, fmt.Errorf("GetAllAttempts:%s", err)
 	}	
 	return results, nil
@@ -26,7 +27,8 @@ func GetAllAttempts(ctx *gin.Context) ([]models.Attempt, error) {
 
 func GetAttemptsBySetting(ctx *gin.Context) ([]models.Attempt, error) {
 	filter := bson.D{{"setting", ctx.Request.URL.Query()["setting"][0]}}
-	results, err := models.FindAttempts(filter); if err != nil {
+	opts := options.Find().SetLimit(10).SetSort(bson.D{{"time", 1}})
+	results, err := models.FindAttempts(filter, opts); if err != nil {
 		return nil, fmt.Errorf("GetAttemptsBySetting:%s", err)
 	}
 	return results, nil
@@ -37,7 +39,7 @@ func GetUserAttempts(ctx *gin.Context) ([]models.Attempt, error) {
 		return nil, fmt.Errorf("GetUserAttempts:failed to parse uid %s", err)
 	}
 	filter := bson.D{{"userId", id}}
-	results, err := models.FindAttempts(filter); if err != nil {
+	results, err := models.FindAttempts(filter, &options.FindOptionsBuilder{}); if err != nil {
 		return nil, fmt.Errorf("GetUserAttempts:%s", err)
 	}
 	return results, nil
