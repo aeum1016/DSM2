@@ -46,7 +46,7 @@ const getMax = (state, operator) => {
 const initialState = {
   settings: {
     mode: GameModes.COMPLETIONS,
-    endAt: 4,
+    endAt: 60,
     min: { add: 2, sub: 2, mult: 1, div: 1 },
     max: { add: 100, sub: 100, mult: 12, div: 12 },
   },

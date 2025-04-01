@@ -9,14 +9,14 @@ export default function LeaderboardPage() {
 
   const mainSettings = {
     mode: GameModes.COMPLETIONS,
-    endAt: 30,
+    endAt: 60,
     min: { add: 2, sub: 2, mult: 1, div: 1 },
     max: { add: 100, sub: 100, mult: 12, div: 12 },
   };
 
   const [secondarySettings, setSecondarySettings] = useState({
     mode: GameModes.DURATION,
-    endAt: 30,
+    endAt: 60,
     min: { add: 2, sub: 2, mult: 1, div: 1 },
     max: { add: 100, sub: 100, mult: 12, div: 12 },
   });
@@ -29,8 +29,15 @@ export default function LeaderboardPage() {
       align={"center"}
       justify={"space-between"}
     >
-      <Leaderboard setting={mainSettings} />
-      <Leaderboard setting={secondarySettings} />
+      <Flex
+        flexWrap={"wrap"}
+        minW={"100%"}
+        align={"center"}
+        justify={"space-around"}
+      >
+        <Leaderboard setting={mainSettings} />
+        <Leaderboard setting={secondarySettings} />
+      </Flex>
     </Flex>
   );
 }
