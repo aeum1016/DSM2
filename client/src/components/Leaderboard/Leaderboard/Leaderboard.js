@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { GetBoundsString, GetGameModeString } from "../../../util/SettingUtil";
 import { GameModes } from "../../../slices/game";
+import { getUsernameThunk } from "../../../slices/user";
 
 const Leaderboard = ({ setting }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Leaderboard = ({ setting }) => {
   const leaderboardAttempts = useSelector(
     (state) => state.attempts.leaderboardAttempts
   );
+  const knownUsers = useSelector((state) => state.user.users);
 
   useEffect(() => {
     dispatch(
@@ -31,6 +33,20 @@ const Leaderboard = ({ setting }) => {
       })
     );
   }, [setting]);
+
+  useEffect(() => {
+    const users = [
+      ...new Set(
+        leaderboardAttempts[settingString]?.map((attempt) => attempt.UserID)
+      ),
+    ];
+
+    users?.forEach((user) => {
+      if (!(user in knownUsers)) {
+        dispatch(getUsernameThunk(user));
+      }
+    });
+  }, [leaderboardAttempts]);
 
   return (
     <TableContainer>
@@ -48,8 +64,8 @@ const Leaderboard = ({ setting }) => {
         </Thead>
         <Tbody>
           {leaderboardAttempts[settingString]?.map((attempt) => (
-            <Tr>
-              <Td>{attempt.UserID}</Td>
+            <Tr key={`${attempt.UserID}${attempt.Time}`}>
+              <Td>{knownUsers[attempt.UserID]}</Td>
               <Td>{(attempt.Time / 1000).toFixed(2)}</Td>
               <Td>
                 {((attempt.Completed * 60) / (attempt.Time / 1000)).toFixed(2)}

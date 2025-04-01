@@ -27,4 +27,4 @@ export const fetchUserAttempts = (userId) =>
 
 export const signIn = (formData) => CURAPI.post("/user/login", formData);
 export const signUp = (formData) => CURAPI.post("/user/register", formData);
-export const getuser = (userId) => CURAPI.get(`/user/profile/${userId}`);
+export const getuser = (userid) => CURAPI.get(`/user/get/${userid}`);

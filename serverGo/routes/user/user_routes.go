@@ -11,7 +11,7 @@ import (
 func InitUserRoutes(r *gin.Engine) {
 	ur := r.Group("/user")
 	ur.GET("/get", GetAllUsers())
-	ur.GET("/get/:email", GetUserByEmail())
+	ur.GET("/get/:uid", GetUserByUserID())
 	ur.POST("/register", RegisterUser())
 	ur.POST("/login", LoginUser())
 }
@@ -27,14 +27,14 @@ func GetAllUsers() gin.HandlerFunc {
 	}
 }
 
-func GetUserByEmail() gin.HandlerFunc {
+func GetUserByUserID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		result, err := user_controller.GetUserByEmail(ctx)
+		result, err := user_controller.GetUserByUserID(ctx)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		ctx.JSON(http.StatusOK, result)
+		ctx.JSON(http.StatusOK, gin.H{"uid": result.UserID, "username": result.Username})
 	}
 }
 

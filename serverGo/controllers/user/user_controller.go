@@ -18,6 +18,7 @@ import (
 type UserController interface {
 	GetAllUsers(ctx *gin.Context) ([]models.User, error)
 	GetUsers(ctx *gin.Context) (models.User, error)
+	GetUserByUserID(ctx *gin.Context) (models.User, error)
 	RegisterUser(ctx *gin.Context) (string, error)
 	LoginUser(ctx *gin.Context) (string, error)
 }
@@ -38,6 +39,14 @@ func GetAllUsers(ctx *gin.Context) ([]models.User, error) {
 	}
 
 	return results, nil
+}
+
+func GetUserByUserID(ctx *gin.Context) (models.User, error) {
+	id, err := bson.ObjectIDFromHex(ctx.Param("uid")); if err != nil {
+		return models.User{}, fmt.Errorf("GetUserAttempts:failed to parse uid %s", err)
+	}
+	filter := bson.D{{"_id", id}}
+	return models.FindOneUser(filter)
 }
 
 func GetUserByEmail(ctx *gin.Context) (models.User, error) {

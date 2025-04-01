@@ -25,9 +25,21 @@ export const signupThunk = createAsyncThunk(
   }
 );
 
+export const getUsernameThunk = createAsyncThunk(
+  "users/getusername",
+  async (userid, thunkAPI) => {
+    try {
+      const response = await api.getuser(userid);
+      return response.data;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
 const profile = localStorage["profile"];
 
-const initialState = { authData: profile ? profile : null };
+const initialState = { authData: profile ? profile : null, users: {} };
 
 export const usersSlice = createSlice({
   name: "users",
@@ -48,6 +60,9 @@ export const usersSlice = createSlice({
       .addCase(signupThunk.fulfilled, (state, action) => {
         localStorage.setItem("profile", action?.payload);
         state.authData = action?.payload;
+      })
+      .addCase(getUsernameThunk.fulfilled, (state, action) => {
+        state.users[action?.payload.uid] = action?.payload.username;
       });
   },
 });

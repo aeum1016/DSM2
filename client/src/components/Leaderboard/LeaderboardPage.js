@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 
 export default function LeaderboardPage() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const mainSettings = {
     mode: GameModes.COMPLETIONS,
