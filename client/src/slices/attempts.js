@@ -15,10 +15,13 @@ export const create = createAsyncThunk(
 
 export const getbysetting = createAsyncThunk(
   "attempts/getbysetting",
-  async (setting, thunkAPI) => {
+  async (settings, thunkAPI) => {
     try {
-      const response = await api.fetchAttemptsBySettings(setting);
-      return { setting: setting, data: response.data };
+      const response = await api.fetchAttemptsBySettings(
+        settings.setting,
+        settings.sort
+      );
+      return { setting: settings.setting, data: response.data };
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }

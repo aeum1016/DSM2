@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { GameModes } from "../../../slices/game";
 import { Box, Text } from "@chakra-ui/react";
+import { GetGameModeString } from "../../../util/SettingUtil";
 
 const GameVersionText = () => {
   const settings = useSelector((state) => state.game.settings);
@@ -9,10 +10,7 @@ const GameVersionText = () => {
     <Box alignSelf={"flex-start"}>
       <Text fontSize={"larger"}>
         {"GAME MODE: "}
-        {settings.mode === GameModes.COMPLETIONS ? "Completions" : "Timed"}
-        {" - "}
-        {settings.endAt}{" "}
-        {settings.mode === GameModes.COMPLETIONS ? "Questions" : "Seconds"}
+        {GetGameModeString(settings)}
       </Text>
     </Box>
   );

@@ -7,10 +7,13 @@ import {
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
+import { GetBoundsString, GetGameModeString } from "../../../util/SettingUtil";
+import { GameModes } from "../../../slices/game";
 
 const Leaderboard = ({ setting }) => {
   const dispatch = useDispatch();
@@ -21,13 +24,21 @@ const Leaderboard = ({ setting }) => {
   );
 
   useEffect(() => {
-    dispatch(getbysetting(settingString));
+    dispatch(
+      getbysetting({
+        setting: settingString,
+        sort: setting.mode === GameModes.COMPLETIONS ? "time" : "completed",
+      })
+    );
   }, [setting]);
 
   return (
     <TableContainer>
       <Table variant="simple">
-        <TableCaption>{settingString}</TableCaption>
+        <TableCaption>
+          <Text>{GetGameModeString(setting)}</Text>
+          <Text>{GetBoundsString(setting)}</Text>
+        </TableCaption>
         <Thead>
           <Tr>
             <Th>Username</Th>

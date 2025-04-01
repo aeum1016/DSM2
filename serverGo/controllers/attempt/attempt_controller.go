@@ -27,7 +27,14 @@ func GetAllAttempts(ctx *gin.Context) ([]models.Attempt, error) {
 
 func GetAttemptsBySetting(ctx *gin.Context) ([]models.Attempt, error) {
 	filter := bson.D{{"setting", ctx.Request.URL.Query()["setting"][0]}}
-	opts := options.Find().SetLimit(10).SetSort(bson.D{{"time", 1}})
+	sort := ctx.Request.URL.Query()["sort"][0]
+	dir := 1
+	if sort == "time" {
+		dir = 1
+	} else if sort == "completed" {
+		dir = -1
+	}
+	opts := options.Find().SetLimit(10).SetSort(bson.D{{sort, dir}})
 	results, err := models.FindAttempts(filter, opts); if err != nil {
 		return nil, fmt.Errorf("GetAttemptsBySetting:%s", err)
 	}
