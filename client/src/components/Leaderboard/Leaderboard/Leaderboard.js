@@ -1,19 +1,54 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getbysetting } from "../../../slices/attempts";
+import {
+  Table,
+  TableCaption,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 
 const Leaderboard = ({ setting }) => {
   const dispatch = useDispatch();
+  const settingString = JSON.stringify(setting);
 
-  const leaderboardAttempts = useSelector((state) => state.attempts);
-
-  console.log(leaderboardAttempts);
+  const leaderboardAttempts = useSelector(
+    (state) => state.attempts.leaderboardAttempts
+  );
 
   useEffect(() => {
-    dispatch(getbysetting(JSON.stringify(setting)));
+    dispatch(getbysetting(settingString));
   }, [setting]);
 
-  return <></>;
+  return (
+    <TableContainer>
+      <Table variant="simple">
+        <TableCaption>{settingString}</TableCaption>
+        <Thead>
+          <Tr>
+            <Th>Username</Th>
+            <Th>Time (Seconds)</Th>
+            <Th>Questions per Minute</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {leaderboardAttempts[settingString]?.map((attempt) => (
+            <Tr>
+              <Td>{attempt.UserID}</Td>
+              <Td>{(attempt.Time / 1000).toFixed(2)}</Td>
+              <Td>
+                {((attempt.Completed * 60) / (attempt.Time / 1000)).toFixed(2)}
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+    </TableContainer>
+  );
 };
 
 export default Leaderboard;
