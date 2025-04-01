@@ -11,16 +11,24 @@ import (
 
 type AttemptController interface {
 	GetAllAttempts(ctx *gin.Context) ([]models.Attempt, error)
+	GetAttemptsBySetting(ctx *gin.Context) ([]models.Attempt, error)
 	CreateAttempt(ctx *gin.Context) error
 	GetUserAttempts(ctx *gin.Context) ([]models.Attempt, error)
 }
 
 func GetAllAttempts(ctx *gin.Context) ([]models.Attempt, error) {
-	
 	filter := bson.D{}
 	results, err := models.FindAttempts(filter); if err != nil {
 		return nil, fmt.Errorf("GetAllAttempts:%s", err)
 	}	
+	return results, nil
+}
+
+func GetAttemptsBySetting(ctx *gin.Context) ([]models.Attempt, error) {
+	filter := bson.D{{"setting", ctx.Request.URL.Query()["setting"][0]}}
+	results, err := models.FindAttempts(filter); if err != nil {
+		return nil, fmt.Errorf("GetAttemptsBySetting:%s", err)
+	}
 	return results, nil
 }
 

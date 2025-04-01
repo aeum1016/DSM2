@@ -13,6 +13,18 @@ export const create = createAsyncThunk(
   }
 );
 
+export const getbysetting = createAsyncThunk(
+  "attempts/getbysetting",
+  async (setting, thunkAPI) => {
+    try {
+      const response = await api.fetchAttemptsBySettings(setting);
+      return { setting: setting, data: response.data };
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
 export const getuser = createAsyncThunk(
   "attempts/getuser",
   async (userId, thunkAPI) => {
@@ -25,7 +37,11 @@ export const getuser = createAsyncThunk(
   }
 );
 
-const initialState = { attempts: [] };
+const initialState = {
+  leaderboardAttempts: {},
+  userAttempts: [],
+  prevAttempt: {},
+};
 
 const attemptsSlice = createSlice({
   name: "attempts",
@@ -35,10 +51,14 @@ const attemptsSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder
       .addCase(create.fulfilled, (state, action) => {
-        state.attempts.push(action?.data);
+        state.prevAttempt = action?.data;
+      })
+      .addCase(getbysetting.fulfilled, (state, action) => {
+        state.leaderboardAttempts[action?.payload.setting] =
+          action?.payload.data;
       })
       .addCase(getuser.fulfilled, (state, action) => {
-        state.attempts = action?.data;
+        state.userAttempts = action?.data;
       });
   },
 });

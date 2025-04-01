@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
+import { useCallback, useEffect } from "react";
+import { Flex } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 

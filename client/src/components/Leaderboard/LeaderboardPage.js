@@ -1,0 +1,36 @@
+import { useState } from "react";
+import { Flex } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import Leaderboard from "./Leaderboard/Leaderboard";
+import { GameModes } from "../../slices/game";
+
+export default function LeaderboardPage() {
+  const navigate = useNavigate();
+
+  const mainSettings = {
+    mode: GameModes.COMPLETIONS,
+    endAt: 30,
+    min: { add: 2, sub: 2, mult: 1, div: 1 },
+    max: { add: 100, sub: 100, mult: 12, div: 12 },
+  };
+
+  const [secondarySettings, setSecondarySettings] = useState({
+    mode: GameModes.DURATION,
+    endAt: 30,
+    min: { add: 2, sub: 2, mult: 1, div: 1 },
+    max: { add: 100, sub: 100, mult: 12, div: 12 },
+  });
+
+  return (
+    <Flex
+      direction={"column"}
+      minH={"100%"}
+      minW={"100%"}
+      align={"center"}
+      justify={"space-between"}
+    >
+      <Leaderboard setting={mainSettings} />
+      <Leaderboard setting={secondarySettings} />
+    </Flex>
+  );
+}
