@@ -10,7 +10,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Lines from "../Line/Lines";
-import { checkAnswer, endGame, startGame } from "../../../slices/game";
+import {
+  checkAnswer,
+  endGame,
+  GameModes,
+  startGame,
+} from "../../../slices/game";
+import GameVersionText from "./GameVersionText";
 
 const Game = () => {
   const dispatch = useDispatch();
@@ -25,7 +31,7 @@ const Game = () => {
   useEffect(() => {
     if (status === 0 && answer !== "") {
       dispatch(startGame());
-      if (settings.mode === "d") {
+      if (settings.mode === GameModes.DURATION) {
         setEndTimer(
           setTimeout(() => dispatch(endGame()), settings.endAt * 1000)
         );
@@ -35,7 +41,7 @@ const Game = () => {
   }, [answer]);
 
   useEffect(() => {
-    if (settings.mode !== "d") {
+    if (settings.mode !== GameModes.DURATION) {
       clearInterval(endTimer);
     }
   }, [settings]);
@@ -47,6 +53,7 @@ const Game = () => {
   return (
     <Box direction={"column"} align={"center"} justify={"center"}>
       <Stack spacing="48px" my={"8rem"}>
+        <GameVersionText />
         <Lines />
       </Stack>
       <Box w={"30%"} align={"center"}>

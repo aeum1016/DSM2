@@ -12,7 +12,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import { createQuestions, reset, setSettings } from "../../../slices/game";
+import { reset, setSettings } from "../../../slices/game";
 import RangeSetting from "./RangeSetting";
 import ModeSetting from "./ModeSetting";
 

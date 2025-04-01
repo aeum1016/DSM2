@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { generateQuestion } from "../util/QuestionUtil";
 
+export const GameModes = Object.freeze({
+  COMPLETIONS: "c",
+  DURATION: "d",
+});
+
 const createQuestion = (state) => {
   const operator = Math.floor(Math.random() * 4);
   state.questions.push(
@@ -40,7 +45,7 @@ const getMax = (state, operator) => {
 
 const initialState = {
   settings: {
-    mode: "c",
+    mode: GameModes.COMPLETIONS,
     endAt: 4,
     min: { add: 2, sub: 2, mult: 1, div: 1 },
     max: { add: 100, sub: 100, mult: 12, div: 12 },

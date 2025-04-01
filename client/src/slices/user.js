@@ -42,7 +42,6 @@ export const usersSlice = createSlice({
     // Add reducers for additional action types here, and handle loading state as needed
     builder
       .addCase(signinThunk.fulfilled, (state, action) => {
-        console.log(action?.payload);
         localStorage.setItem("profile", action?.payload);
         state.authData = action?.payload;
       })
