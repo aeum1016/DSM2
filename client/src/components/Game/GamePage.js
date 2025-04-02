@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import GameSummary from "./GameSummary/GameSummary";
 import Game from "./Game/Game";
-import Settings from "./Settings/Settings";
+import Settings from "../Util/Settings/Settings";
 
 export default function GamePage() {
   const navigate = useNavigate();
