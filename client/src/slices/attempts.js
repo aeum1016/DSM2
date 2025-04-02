@@ -57,6 +57,7 @@ const attemptsSlice = createSlice({
         state.prevAttempt = action?.data;
       })
       .addCase(getbysetting.fulfilled, (state, action) => {
+        state.leaderboardAttempts[action?.payload] = [];
         state.leaderboardAttempts[action?.payload.setting] =
           action?.payload.data;
       })
