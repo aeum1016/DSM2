@@ -10,7 +10,8 @@ import (
 func InitAttemptRoutes(r *gin.Engine) {
 	ur := r.Group("/attempt")
 	ur.GET("/get", GetAllAttempts())
-	ur.GET("/get/setting", GetAttemptsBySetting())
+	ur.GET("/get/time/:setting", GetLeaderboardAttemptsByTime())
+	ur.GET("/get/completed/:setting", GetLeaderboardAttemptsByCompleted())
 	ur.GET("/get/:uid", GetUserAttempts())
 	ur.POST("/create", CreateAttempt())
 }
@@ -26,9 +27,20 @@ func GetAllAttempts() gin.HandlerFunc {
 	}
 }
 
-func GetAttemptsBySetting() gin.HandlerFunc {
+func GetLeaderboardAttemptsByTime() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		result, err := attempt_controller.GetAttemptsBySetting(ctx)
+		result, err := attempt_controller.GetLeaderboardAttemptsByTime(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err)
+			return
+		}
+		ctx.JSON(http.StatusOK, result)
+	}
+}
+
+func GetLeaderboardAttemptsByCompleted() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		result, err := attempt_controller.GetLeaderboardAttemptsByCompleted(ctx)
 		if err != nil {
 			ctx.JSON(http.StatusInternalServerError, err)
 			return

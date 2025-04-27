@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Flex, Text } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import Leaderboard from "./Leaderboard/Leaderboard";
 import { GameModes, reset } from "../../slices/game";
 import { useDispatch, useSelector } from "react-redux";

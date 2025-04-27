@@ -18,8 +18,10 @@ const CURAPI = API;
 // });
 
 export const fetchAttempts = () => CURAPI.get("/attempt");
-export const fetchAttemptsBySettings = (settings, sort) =>
-  CURAPI.get(`/attempt/get/setting?setting=${settings}&sort=${sort}`);
+export const fetchAttemptsByTime = (settings) =>
+  CURAPI.get(`/attempt/get/time/${settings}`);
+export const fetchAttemptsByCompleted = (settings) =>
+  CURAPI.get(`/attempt/get/completed/${settings}`);
 export const createAttempt = (newAttempt) =>
   CURAPI.post("/attempt/create", newAttempt);
 export const fetchUserAttempts = (userId) =>

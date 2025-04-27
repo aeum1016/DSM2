@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import * as api from "../api/index.js";
+import { GameModes } from "./game.js";
 
 export const create = createAsyncThunk(
   "attempts/create",
@@ -10,22 +11,24 @@ export const create = createAsyncThunk(
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
-  }
+  },
 );
 
 export const getbysetting = createAsyncThunk(
   "attempts/getbysetting",
   async (settings, thunkAPI) => {
     try {
-      const response = await api.fetchAttemptsBySettings(
-        settings.setting,
-        settings.sort
-      );
+      var response;
+      if (settings.sort === GameModes.COMPLETIONS) {
+        response = await api.fetchAttemptsByCompleted(settings.setting);
+      } else if (settings.sort === GameModes.DURATION) {
+        response = await api.fetchAttemptsByTime(settings.setting);
+      }
       return { setting: settings.setting, data: response.data };
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
-  }
+  },
 );
 
 export const getuser = createAsyncThunk(
@@ -37,7 +40,7 @@ export const getuser = createAsyncThunk(
     } catch (err) {
       return thunkAPI.rejectWithValue(err);
     }
-  }
+  },
 );
 
 const initialState = {
@@ -57,7 +60,6 @@ const attemptsSlice = createSlice({
         state.prevAttempt = action?.data;
       })
       .addCase(getbysetting.fulfilled, (state, action) => {
-        state.leaderboardAttempts[action?.payload] = [];
         state.leaderboardAttempts[action?.payload.setting] =
           action?.payload.data;
       })

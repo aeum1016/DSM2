@@ -21,7 +21,7 @@ const Leaderboard = ({ setting }) => {
   const settingString = JSON.stringify(setting);
 
   const leaderboardAttempts = useSelector(
-    (state) => state.attempts.leaderboardAttempts
+    (state) => state.attempts.leaderboardAttempts,
   );
   const knownUsers = useSelector((state) => state.user.users);
 
@@ -29,15 +29,18 @@ const Leaderboard = ({ setting }) => {
     dispatch(
       getbysetting({
         setting: settingString,
-        sort: setting.mode === GameModes.COMPLETIONS ? "time" : "completed",
-      })
+        sort:
+          setting.mode === GameModes.COMPLETIONS
+            ? GameModes.DURATION
+            : GameModes.COMPLETIONS,
+      }),
     );
   }, [setting]);
 
   useEffect(() => {
     const users = [
       ...new Set(
-        leaderboardAttempts[settingString]?.map((attempt) => attempt.UserID)
+        leaderboardAttempts[settingString]?.map((attempt) => attempt.UserID),
       ),
     ];
 
