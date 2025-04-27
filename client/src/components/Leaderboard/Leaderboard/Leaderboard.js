@@ -61,14 +61,16 @@ const Leaderboard = ({ setting }) => {
         <Thead>
           <Tr>
             <Th>Username</Th>
+            <Th>Questions</Th>
             <Th>Time (Seconds)</Th>
-            <Th>Questions per Minute</Th>
+            <Th>Speed (QPM)</Th>
           </Tr>
         </Thead>
         <Tbody>
           {leaderboardAttempts[settingString]?.map((attempt) => (
             <Tr key={`${attempt.UserID}${attempt.Time}`}>
               <Td>{knownUsers[attempt.UserID]}</Td>
+              <Td>{attempt.Completed}</Td>
               <Td>{(attempt.Time / 1000).toFixed(2)}</Td>
               <Td>
                 {((attempt.Completed * 60) / (attempt.Time / 1000)).toFixed(2)}
