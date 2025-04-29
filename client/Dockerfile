@@ -3,6 +3,7 @@ FROM node:20-alpine AS builder
 
 # Declaring env
 ENV NODE_ENV production
+ENV REACT_APP_BACKEND_URL https://backend.dosomemath.com
 
 # Setting up the work directory
 WORKDIR /app

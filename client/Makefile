@@ -18,7 +18,7 @@ endif
 build-docker:
 	@echo "Last tag: $(LAST_TAG)"
 	@echo "Building new image with tag: $(NEXT_TAG)"
-	docker build -t $(IMAGE_NAME):$(NEXT_TAG) -t $(IMAGE_NAME):latest .
+	docker build --platform linux/amd64 -t $(IMAGE_NAME):$(NEXT_TAG) -t $(IMAGE_NAME):latest .
 
 push-docker:
 	@echo "Pushing image $(IMAGE_NAME):$(LAST_TAG)"
